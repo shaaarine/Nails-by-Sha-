@@ -325,15 +325,15 @@
     <div class="quote-grid">
       <div class="quote" style="font-style:normal;">
         <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Booking &amp; deposits</div>
-        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">A ₱500 deposit is required to confirm your slot; it's deducted from your total. Squeeze-in appointments (outside regular open slots) may be accommodated when possible — message @sharine.nails on IG to ask.</p>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">A <strong>₱500</strong> deposit is required to confirm your slot; it's deducted from your total. Squeeze-in appointments (outside regular open slots) may be accommodated when possible — message @sharine.nails on IG to ask.</p>
       </div>
       <div class="quote" style="font-style:normal;">
         <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Cancellations &amp; late arrivals</div>
-        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Please give 24-48 hour notice as possible if you need to cancel or reschedule — late cancellations may forfeit the deposit. A 15-20 minute grace period applies for late arrivals; beyond that, a ₱300 late fee will be applied. If the client is around 30+ minutes - 1 hour late, the appointment may need to be rescheduled to protect the next client's slot.</p>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Please give 24-48 hour notice as possible if you need to cancel or reschedule — late cancellations may forfeit the deposit. <p>A 15 minute grace period applies for late arrivals. Beyond that, late fees will be applied.</p><p>16-20 minutes late: ₱300 late fee</p><p>21-30 minutes late: ₱500 late fee</p> <p>If the client is around 30+ minutes - 1 hour late, the appointment may need to be rescheduled to protect the next client's slot.</p></p>
       </div>
       <div class="quote" style="font-style:normal;">
         <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Home service</div>
-        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Available around Parañaque City and nearby cities around Metro Manila. Add ₱500 on top of the service price for home service; transportation is shouldered by the client (Grab/InDrive fare to and from location OR pickup at my location — whichever's more convenient for you).</p>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Available around Parañaque City and nearby cities around Metro Manila. Add <strong>₱500</strong> on top of the service price for home service; transportation is shouldered by the client (Grab/InDrive fare to and from location OR pickup at my location — whichever's more convenient for you).</p>
       </div>
       <div class="quote" style="font-style:normal;">
         <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Design &amp; nail inspo</div>
@@ -350,9 +350,9 @@
       <h2>What clients say</h2>
     </div>
     <div class="quote-grid">
-      <div class="quote"><p>"Edit me — paste a real client quote here about the result or the experience."</p><div class="who">— Client initials, service booked</div></div>
-      <div class="quote"><p>"Edit me — a second testimonial focused on longevity or precision works well here."</p><div class="who">— Client initials, service booked</div></div>
-      <div class="quote"><p>"Edit me — a third testimonial about booking ease or studio atmosphere."</p><div class="who">— Client initials, service booked</div></div>
+      <div class="quote"><p>"Still obsessed with how clean my cuticles are from russian manicure"</p><div class="who">— G.B.F, Russian Manicure with Hard Gel Overlay</div></div>
+      <div class="quote"><p>"Travel and golf proof nails by Sha! Super love that everything'sstill intact after 6 weeks!!!"</p><div class="who">— A.G, Russian Manicure with Softgel Extensions</div></div>
+      <div class="quote"><p>"Looks like my natural nails even if they're extensions, also not bulky at all! Love it so much, I'm so addicted to getting a new set every month <3"</p><div class="who">— R.E, Russian Manicure with Hard Gel Extensions</div></div>
     </div>
   </div>
 </section>
@@ -395,12 +395,11 @@
       <div class="foot-col">
         <h4>Contact</h4>
         <a href="https://instagram.com/sharine.nails" target="_blank">@sharine.nails</a>
-        <a href="tel:+10000000000">(edit phone number)</a>
+        <a href="tel:+10000000000">09272568685</a>
       </div>
       <div class="foot-col">
         <h4>Hours</h4>
-        <p>Tue–Sat · 10:00–18:00</p>
-        <p>Sun–Mon · Closed</p>
+        <p>Mon–Sun · 10:00–18:00</p>
       </div>
       <div class="foot-col">
         <h4>Nail inspo?</h4>
@@ -410,7 +409,6 @@
     </div>
     <div class="foot-bottom">
       <span>© <span id="year"></span> Nails by Sha. Certified Russian Manicure Specialist.</span>
-      <span>Edit hours, phone number, and Parañaque service-area details as needed.</span>
     </div>
   </div>
 </footer>
@@ -420,8 +418,8 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 /* ---------------- Data (edit freely) ---------------- */
 const SERVICES = [
-  {id:'rm-new', name:'Russian Manicure — New Set', dur:'75 min', price:1200, desc:'Full dry cuticle work, shaping, and top coat. No color.'},
-  {id:'rm-gel', name:'Russian Manicure + Gel Polish', dur:'90 min', price:1600, desc:'Full manicure plus a full gel polish application.'},
+  {id:'rm-new', name:'Russian Manicure (cleaning only)', dur:'1-1:30 hrs', price:1190, desc:'Full dry cuticle cleaning and nail shaping only'},
+  {id:'rm-gel', name:'Russian Manicure + Hard Gel Overlay', dur:'3hrs', price:1690, desc:'Russian manicure cleaning plus a nude/whitehard gel application.'},
   {id:'rm-fill', name:'Fill / Rebalance', dur:'60 min', price:900, desc:'For returning clients within 3 weeks of their last set.'},
   {id:'chrome', name:'Chrome or Cat-Eye Finish', dur:'+20 min', price:300, desc:'Add-on to any gel service.'},
   {id:'soakoff', name:'Soak-Off Only', dur:'30 min', price:300, desc:'Gel removal without a new service.'},
