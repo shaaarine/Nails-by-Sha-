@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nails by Sha — Russian Manicure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone:#EAE3DA;
+    --card:#F5F0E8;
+    --ink:#2A2118;
+    --ink-soft:#6b5f52;
+    --wine:#7B2D3E;
+    --wine-deep:#5c2029;
+    --champagne:#C6A15B;
+    --sage:#8B9A7C;
+    --line: rgba(42,33,24,0.12);
+    --radius: 2px;
+    --shadow: 0 1px 2px rgba(42,33,24,0.06);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--stone);
+    color:var(--ink);
+    font-family:'Public Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.02em;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--wine);
+  }
+  a{color:inherit;}
+  button{font-family:inherit; cursor:pointer;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- Nav ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(234,227,218,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif; font-size:19px; font-weight:600;
+  }
+  .brand .mark{
+    width:14px; height:18px; border-radius:14px 14px 4px 4px;
+    background:var(--wine); display:inline-block;
+  }
+  .navlinks{display:flex; align-items:center; gap:28px; font-size:14px;}
+  .navlinks a{text-decoration:none; color:var(--ink-soft); transition:color .15s;}
+  .navlinks a:hover{color:var(--ink);}
+  .navlinks .cta{
+    background:var(--wine); color:#fff; padding:9px 18px;
+    border-radius:var(--radius); font-size:13px; letter-spacing:0.02em;
+  }
+  .navlinks .cta:hover{background:var(--wine-deep);}
+  @media (max-width:720px){ .navlinks a:not(.cta){display:none;} }
+
+  /* ---------- Hero ---------- */
+  .hero{padding:76px 0 40px;}
+  .hero h1{
+    font-size:clamp(40px,7vw,68px);
+    line-height:0.98;
+    max-width:14ch;
+  }
+  .hero h1 em{color:var(--wine); font-style:italic;}
+  .hero p{
+    max-width:46ch; margin-top:18px; font-size:16px;
+    color:var(--ink-soft); line-height:1.55;
+  }
+  .hero-actions{display:flex; gap:14px; margin-top:28px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--ink); color:var(--stone); border:none;
+    padding:14px 26px; border-radius:var(--radius); font-size:14px; font-weight:500;
+    letter-spacing:0.02em; transition:transform .15s ease, background .15s;
+  }
+  .btn-primary:hover{background:var(--wine); transform:translateY(-1px);}
+  .btn-secondary{
+    background:transparent; border:1px solid var(--line); color:var(--ink);
+    padding:14px 26px; border-radius:var(--radius); font-size:14px;
+  }
+  .btn-secondary:hover{border-color:var(--ink);}
+
+  /* Signature: nail-shape swatch strip, doubles as category nav */
+  .shape-strip{
+    display:flex; gap:22px; margin-top:56px; padding-top:28px;
+    border-top:1px solid var(--line); flex-wrap:wrap;
+  }
+  .shape-item{
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    background:none; border:none; padding:0; width:78px;
+  }
+  .shape{width:34px; height:44px;}
+  .shape.round{border-radius:50% 50% 20% 20%;}
+  .shape.square{border-radius:3px;}
+  .shape.almond{border-radius:50% 50% 45% 45% / 62% 62% 30% 30%;}
+  .shape.coffin{clip-path:polygon(20% 0,80% 0,100% 78%,72% 100%,28% 100%,0 78%);}
+  .shape.stiletto{clip-path:polygon(50% 0,100% 82%,72% 100%,28% 100%,0 82%);}
+  .shape-item span{font-size:11px; color:var(--ink-soft); text-align:center;}
+  .shape-item:hover .shape{transform:translateY(-3px);}
+  .shape{transition:transform .18s;}
+
+  /* ---------- Section shell ---------- */
+  section{padding:72px 0;}
+  .section-head{margin-bottom:36px; max-width:52ch;}
+  .section-head h2{font-size:32px; margin-top:6px;}
+  .section-head p{color:var(--ink-soft); margin-top:10px; font-size:15px; line-height:1.5;}
+
+  /* ---------- Services ---------- */
+  .svc-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .svc-card{background:var(--card); padding:24px; display:flex; flex-direction:column; gap:10px;}
+  .svc-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+  .svc-card h3{font-size:18px;}
+  .svc-price{font-size:15px; color:var(--wine); white-space:nowrap;}
+  .svc-desc{font-size:13.5px; color:var(--ink-soft); line-height:1.5; flex:1;}
+  .svc-dur{font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em;}
+
+  /* ---------- Gallery ---------- */
+  .gal-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px;}
+  .gal-tile{
+    aspect-ratio:4/5; border-radius:var(--radius); position:relative; overflow:hidden;
+    display:flex; align-items:flex-end; padding:14px;
+  }
+  .gal-tile span{
+    color:#fff; font-size:12px; font-family:'IBM Plex Mono',monospace; letter-spacing:.03em;
+    text-shadow:0 1px 4px rgba(0,0,0,.35);
+  }
+  .g1{background:linear-gradient(155deg,#efe6da,#c9b9a4);}
+  .g2{background:linear-gradient(155deg,#d8cfe6,#a99cc4);}
+  .g3{background:linear-gradient(155deg,#7B2D3E,#4a151f);}
+  .g4{background:linear-gradient(155deg,#e9e2d3,#c6a15b);}
+  .g5{background:linear-gradient(155deg,#dbe3d3,#8B9A7C);}
+  .gal-note{margin-top:14px; font-size:12.5px; color:var(--ink-soft);}
+
+  /* ---------- Testimonials ---------- */
+  .quote-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px;}
+  .quote{background:var(--card); border:1px solid var(--line); padding:22px; border-radius:var(--radius);}
+  .quote p{font-size:14.5px; line-height:1.6; font-style:italic; font-family:'Fraunces',serif;}
+  .quote .who{margin-top:14px; font-size:12px; color:var(--ink-soft);}
+
+  /* ---------- Booking ---------- */
+  .book-shell{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:32px; max-width:720px;
+  }
+  .steps{display:flex; gap:8px; margin-bottom:28px;}
+  .step-dot{
+    flex:1; height:3px; background:var(--line); border-radius:2px; overflow:hidden;
+  }
+  .step-dot i{display:block; height:100%; width:0%; background:var(--wine); transition:width .25s;}
+  .step-label{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:18px;}
+
+  .opt-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px;}
+  .opt-card{
+    border:1px solid var(--line); background:var(--stone); border-radius:var(--radius);
+    padding:14px; text-align:left; transition:border-color .15s, background .15s;
+  }
+  .opt-card:hover{border-color:var(--champagne);}
+  .opt-card.active{border-color:var(--wine); background:#fff;}
+  .opt-card .name{font-size:14px; font-weight:500;}
+  .opt-card .meta{font-size:12px; color:var(--ink-soft); margin-top:4px;}
+
+  .date-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:8px;}
+  .date-card{
+    border:1px solid var(--line); background:var(--stone); border-radius:var(--radius);
+    padding:10px 4px; text-align:center;
+  }
+  .date-card .dow{font-size:10px; color:var(--ink-soft); text-transform:uppercase;}
+  .date-card .num{font-size:15px; font-family:'IBM Plex Mono',monospace; margin-top:2px;}
+  .date-card.active{border-color:var(--wine); background:#fff;}
+  .date-card:disabled{opacity:.35; cursor:not-allowed;}
+
+  .time-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:8px;}
+  .time-card{
+    border:1px solid var(--line); background:var(--stone); border-radius:var(--radius);
+    padding:10px; font-family:'IBM Plex Mono',monospace; font-size:13px; text-align:center;
+  }
+  .time-card.active{border-color:var(--wine); background:#fff; color:var(--wine);}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:12px; color:var(--ink-soft); margin-bottom:6px;}
+  .field input, .field textarea{
+    width:100%; border:1px solid var(--line); background:var(--stone);
+    padding:11px 12px; border-radius:var(--radius); font-family:inherit; font-size:14px;
+    color:var(--ink);
+  }
+  .field input:focus, .field textarea:focus{outline:2px solid var(--champagne); outline-offset:1px;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:520px){ .field-row{grid-template-columns:1fr;} }
+
+  .summary{
+    background:var(--stone); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 18px; font-size:13.5px; margin-bottom:20px;
+  }
+  .summary div{display:flex; justify-content:space-between; padding:4px 0;}
+  .summary .lbl{color:var(--ink-soft);}
+
+  .step-nav{display:flex; justify-content:space-between; margin-top:24px;}
+  .btn-ghost{background:none; border:none; color:var(--ink-soft); font-size:13px; padding:10px;}
+  .btn-ghost:hover{color:var(--ink);}
+  .btn-ghost:disabled{opacity:0; pointer-events:none;}
+
+  .success{text-align:center; padding:20px 0;}
+  .success .mark{
+    width:54px; height:54px; border-radius:50%; background:var(--sage); color:#fff;
+    display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:24px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line); padding:44px 0; margin-top:20px;}
+  .foot-grid{display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; font-size:13.5px;}
+  .foot-col h4{font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:10px; font-family:'Public Sans',sans-serif; font-weight:600;}
+  .foot-col p, .foot-col a{display:block; color:var(--ink); text-decoration:none; margin-bottom:6px;}
+  .foot-bottom{margin-top:34px; padding-top:18px; border-top:1px solid var(--line); font-size:11.5px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+
+  ::selection{background:var(--champagne); color:#fff;}
+  :focus-visible{outline:2px solid var(--wine); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; scroll-behavior:auto !important;} }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brand"><span class="mark"></span>Nails by Sha</div>
+    <div class="navlinks">
+      <a href="#services">Services</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#policies">Policies</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#book" class="cta">Book now</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Certified Russian Manicure Specialist · Parañaque City</p>
+    <h1>Precision,<br><em>by hand.</em></h1>
+    <p>A dry, machine-assisted manicure technique built on control, not shortcuts — every cuticle worked by hand, every edge measured. By appointment only, studio or home service.</p>
+    <div class="hero-actions">
+      <a href="#book"><button class="btn-primary">Book your appointment</button></a>
+      <a href="#services"><button class="btn-secondary">View services &amp; pricing</button></a>
+    </div>
+
+    <div class="shape-strip">
+      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
+        <span class="shape round" style="background:var(--wine)"></span><span>Round</span>
+      </button>
+      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
+        <span class="shape square" style="background:var(--champagne)"></span><span>Square</span>
+      </button>
+      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
+        <span class="shape almond" style="background:var(--sage)"></span><span>Almond</span>
+      </button>
+      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
+        <span class="shape coffin" style="background:var(--ink)"></span><span>Coffin</span>
+      </button>
+      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
+        <span class="shape stiletto" style="background:var(--wine-deep)"></span><span>Stiletto</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Menu</p>
+      <h2>Services &amp; pricing</h2>
+      <p>Every appointment includes dry cuticle work, shaping to your preferred silhouette, and a finishing top coat. Home service available around Parañaque City — add ₱500 plus transportation (shouldered by the client). Edit prices freely — these are placeholders.</p>
+    </div>
+    <div class="svc-grid" id="serviceGrid"></div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Portfolio</p>
+      <h2>Recent sets</h2>
+      <p>Swap these placeholder tiles for real photos of your work — clients book fastest when they can see your actual finish quality.</p>
+    </div>
+    <div class="gal-grid">
+      <div class="gal-tile g1"><span>Milky nude / round</span></div>
+      <div class="gal-tile g2"><span>Lilac glazed / almond</span></div>
+      <div class="gal-tile g3"><span>Oxblood chrome / coffin</span></div>
+      <div class="gal-tile g4"><span>Champagne shimmer / square</span></div>
+      <div class="gal-tile g5"><span>Sage matte / almond</span></div>
+    </div>
+    <p class="gal-note">→ Replace the <span class="mono">.g1–.g5</span> tiles with <span class="mono">&lt;img&gt;</span> tags pointing to your own photos.</p>
+  </div>
+</section>
+
+<section id="policies">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Please read before booking</p>
+      <h2>Policies &amp; guidelines</h2>
+      <p>A few things that keep the schedule fair for everyone — thanks for understanding.</p>
+    </div>
+    <div class="quote-grid">
+      <div class="quote" style="font-style:normal;">
+        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Booking &amp; deposits</div>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">A deposit is required to confirm your slot; it's deducted from your total. Squeeze-in appointments (outside regular open slots) may be accommodated when possible — message @sharine.nails to ask.</p>
+      </div>
+      <div class="quote" style="font-style:normal;">
+        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Cancellations &amp; late arrivals</div>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Please give as much notice as possible if you need to cancel or reschedule — late cancellations may forfeit the deposit. A grace period applies for late arrivals; beyond that, the appointment may need to be rescheduled to protect the next client's slot.</p>
+      </div>
+      <div class="quote" style="font-style:normal;">
+        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Home service</div>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Available around Parañaque City and nearby. Add ₱500 on top of the service price for home service; transportation is shouldered by the client (fare, pickup, or padala — whichever's easiest for you).</p>
+      </div>
+      <div class="quote" style="font-style:normal;">
+        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Design &amp; nail inspo</div>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Send your design or nail inspo photos via DM to <strong>@sharine.nails</strong> 24–48 hours before your appointment. Not sure what something costs? Send the photo and a quote will be provided.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Word of mouth</p>
+      <h2>What clients say</h2>
+    </div>
+    <div class="quote-grid">
+      <div class="quote"><p>"Edit me — paste a real client quote here about the result or the experience."</p><div class="who">— Client initials, service booked</div></div>
+      <div class="quote"><p>"Edit me — a second testimonial focused on longevity or precision works well here."</p><div class="who">— Client initials, service booked</div></div>
+      <div class="quote"><p>"Edit me — a third testimonial about booking ease or studio atmosphere."</p><div class="who">— Client initials, service booked</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="book">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Appointments</p>
+      <h2>Book your visit</h2>
+      <p>Four quick steps. Available times come straight from the studio's live calendar, and booking here reserves the slot automatically.</p>
+    </div>
+
+    <div class="book-shell">
+      <div class="steps">
+        <div class="step-dot"><i id="dot1"></i></div>
+        <div class="step-dot"><i id="dot2"></i></div>
+        <div class="step-dot"><i id="dot3"></i></div>
+        <div class="step-dot"><i id="dot4"></i></div>
+      </div>
+
+      <div id="stepContent"></div>
+
+      <div class="step-nav">
+        <button class="btn-ghost" id="backBtn" onclick="prevStep()">← Back</button>
+        <button class="btn-primary" id="nextBtn" onclick="nextStep()">Continue</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h4>Studio</h4>
+        <p>Nails by Sha</p>
+        <p>By appointment only</p>
+        <p>Parañaque City · home service available</p>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="https://instagram.com/sharine.nails" target="_blank">@sharine.nails</a>
+        <a href="tel:+10000000000">(edit phone number)</a>
+      </div>
+      <div class="foot-col">
+        <h4>Hours</h4>
+        <p>Tue–Sat · 10:00–18:00</p>
+        <p>Sun–Mon · Closed</p>
+      </div>
+      <div class="foot-col">
+        <h4>Nail inspo?</h4>
+        <p>Send photos via DM<br>24–48 hrs before your visit</p>
+        <a href="https://instagram.com/sharine.nails" target="_blank">@sharine.nails ↗</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> Nails by Sha. Certified Russian Manicure Specialist.</span>
+      <span>Edit hours, phone number, and Parañaque service-area details as needed.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---------------- Data (edit freely) ---------------- */
+const SERVICES = [
+  {id:'rm-new', name:'Russian Manicure — New Set', dur:'75 min', price:1200, desc:'Full dry cuticle work, shaping, and top coat. No color.'},
+  {id:'rm-gel', name:'Russian Manicure + Gel Polish', dur:'90 min', price:1600, desc:'Full manicure plus a full gel polish application.'},
+  {id:'rm-fill', name:'Fill / Rebalance', dur:'60 min', price:900, desc:'For returning clients within 3 weeks of their last set.'},
+  {id:'chrome', name:'Chrome or Cat-Eye Finish', dur:'+20 min', price:300, desc:'Add-on to any gel service.'},
+  {id:'soakoff', name:'Soak-Off Only', dur:'30 min', price:300, desc:'Gel removal without a new service.'},
+  {id:'reset', name:'Full Reset (Soak-off + New Set)', dur:'105 min', price:1600, desc:'Old gel removed, nails reset, and a fresh Russian manicure applied.'}
+];
+const HOME_SERVICE_FEE = 500; // + client shoulders transportation
+
+/* Paste your deployed Apps Script Web App URL here (see setup-guide.md).
+   Leave blank to run in demo mode with made-up open slots. */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwCWYK2mL04XqL8MFXJY_xWxbhDZmulntyh5sahy0IhwUoNVY6VBj8Wkf_9aivJYhR50w/exec';
+
+/* ---------------- Render services ---------------- */
+const grid = document.getElementById('serviceGrid');
+SERVICES.forEach(s=>{
+  const el = document.createElement('div');
+  el.className = 'svc-card';
+  el.innerHTML = `
+    <div class="svc-top">
+      <h3>${s.name}</h3>
+      <span class="svc-price mono">₱${s.price}</span>
+    </div>
+    <div class="svc-dur mono">${s.dur}</div>
+    <div class="svc-desc">${s.desc}</div>`;
+  grid.appendChild(el);
+});
+
+/* ---------------- Booking flow state ---------------- */
+let state = { step:1, service:null, date:null, time:null, name:'', phone:'', email:'', notes:'', homeService:false };
+let openSlots = [];       // [{date:'2026-09-03', time:'14:30', duration:240}, ...]
+let slotsLoaded = false;
+let slotsError = false;
+
+function fmtDate(iso){
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+}
+
+async function loadSlots(){
+  if(slotsLoaded) return;
+  if(!SCRIPT_URL){
+    // Demo mode — no backend configured yet
+    const demo = [];
+    let d = new Date();
+    let added = 0;
+    while(added < 8){
+      d.setDate(d.getDate()+1);
+      if(![0,1].includes(d.getDay())){
+        const iso = d.toISOString().slice(0,10);
+        demo.push({date:iso, time:'10:00', duration:240});
+        demo.push({date:iso, time:'15:00', duration:240});
+        added++;
+      }
+    }
+    openSlots = demo;
+    slotsLoaded = true;
+    return;
+  }
+  try{
+    const res = await fetch(`${SCRIPT_URL}?action=slots`);
+    const data = await res.json();
+    if(data.ok){ openSlots = data.slots; slotsLoaded = true; }
+    else { slotsError = true; }
+  }catch(err){
+    slotsError = true;
+  }
+}
+
+function render(){
+  // progress dots
+  for(let i=1;i<=4;i++){
+    document.getElementById('dot'+i).style.width = state.step >= i ? '100%' : '0%';
+  }
+  document.getElementById('backBtn').disabled = state.step === 1;
+
+  const content = document.getElementById('stepContent');
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'inline-block';
+  nextBtn.textContent = 'Continue';
+
+  if(state.step === 1){
+    content.innerHTML = `<div class="step-label">Step 1 · Choose a service</div>
+      <div class="opt-grid" id="svcOpts"></div>
+      <label style="display:flex; align-items:center; gap:10px; margin-top:18px; font-size:13.5px; color:var(--ink-soft); cursor:pointer;">
+        <input type="checkbox" id="homeServiceChk" ${state.homeService?'checked':''} style="width:16px; height:16px;">
+        Home service (+₱${HOME_SERVICE_FEE}, transportation shouldered by client — Parañaque City area)
+      </label>`;
+    const wrap = document.getElementById('svcOpts');
+    SERVICES.forEach(s=>{
+      const b = document.createElement('button');
+      b.className = 'opt-card' + (state.service?.id===s.id ? ' active':'');
+      b.innerHTML = `<div class="name">${s.name}</div><div class="meta mono">${s.dur} · ₱${s.price}</div>`;
+      b.onclick = ()=>{ state.service = s; render(); };
+      wrap.appendChild(b);
+    });
+    document.getElementById('homeServiceChk').onchange = (e)=>{ state.homeService = e.target.checked; };
+  }
+
+  if(state.step === 2){
+    if(!slotsLoaded && !slotsError){
+      content.innerHTML = `<div class="step-label">Step 2 · Choose a date</div><p style="color:var(--ink-soft); font-size:14px;">Loading available times…</p>`;
+      nextBtn.style.display = 'none';
+      loadSlots().then(render);
+      return;
+    }
+    if(slotsError){
+      content.innerHTML = `<div class="step-label">Step 2 · Choose a date</div><p style="color:var(--wine); font-size:14px;">Couldn't load availability right now. Please refresh, or contact the studio directly to book.</p>`;
+      nextBtn.style.display = 'none';
+      return;
+    }
+    const dates = [...new Set(openSlots.map(s=>s.date))].sort();
+    if(dates.length === 0){
+      content.innerHTML = `<div class="step-label">Step 2 · Choose a date</div><p style="color:var(--ink-soft); font-size:14px;">No open appointments right now — check back soon or contact the studio directly.</p>`;
+      nextBtn.style.display = 'none';
+      return;
+    }
+    content.innerHTML = `<div class="step-label">Step 2 · Choose a date</div>
+      <div class="date-grid" id="dateOpts"></div>
+      <div class="step-label" style="margin-top:22px;">Choose a time</div>
+      <div class="time-grid" id="timeOpts"></div>`;
+    const dwrap = document.getElementById('dateOpts');
+    dates.forEach(iso=>{
+      const d = new Date(iso + 'T00:00:00');
+      const b = document.createElement('button');
+      b.className = 'date-card' + (state.date===iso ? ' active':'');
+      b.innerHTML = `<div class="dow">${d.toLocaleDateString(undefined,{weekday:'short'})}</div><div class="num">${d.getDate()}</div>`;
+      b.onclick = ()=>{ state.date = iso; state.time = null; state.dateLabel = fmtDate(iso); render(); };
+      dwrap.appendChild(b);
+    });
+    const twrap = document.getElementById('timeOpts');
+    if(!state.date){
+      twrap.innerHTML = `<p style="color:var(--ink-soft); font-size:13px;">Pick a date to see times.</p>`;
+    } else {
+      openSlots.filter(s=>s.date===state.date).forEach(s=>{
+        const b = document.createElement('button');
+        b.className = 'time-card' + (state.time===s.time ? ' active':'');
+        b.textContent = s.time;
+        b.onclick = ()=>{ state.time = s.time; render(); };
+        twrap.appendChild(b);
+      });
+    }
+  }
+
+  if(state.step === 3){
+    content.innerHTML = `<div class="step-label">Step 3 · Your details</div>
+      <div class="field-row">
+        <div class="field"><label>Full name</label><input id="fName" value="${state.name}" placeholder="Jane Doe"></div>
+        <div class="field"><label>Phone</label><input id="fPhone" value="${state.phone}" placeholder="(555) 555-5555"></div>
+      </div>
+      <div class="field"><label>Email</label><input id="fEmail" value="${state.email}" placeholder="jane@email.com"></div>
+      <div class="field"><label>Notes (optional)</label><textarea id="fNotes" rows="3" placeholder="Preferred shape, allergies, first-time visit, etc.">${state.notes}</textarea></div>`;
+  }
+
+  if(state.step === 4){
+    content.innerHTML = `<div class="step-label">Step 4 · Confirm</div>
+      <div class="summary">
+        <div><span class="lbl">Service</span><span>${state.service?.name || '—'}</span></div>
+        <div><span class="lbl">Duration</span><span class="mono">${state.service?.dur || '—'}</span></div>
+        <div><span class="lbl">Price</span><span class="mono">₱${state.service?.price ?? '—'}${state.homeService ? ' + ₱'+HOME_SERVICE_FEE+' home service' : ''}</span></div>
+        ${state.homeService ? '<div><span class="lbl">Transportation</span><span>Shouldered by client</span></div>' : ''}
+        <div><span class="lbl">Date</span><span>${state.dateLabel || '—'}</span></div>
+        <div><span class="lbl">Time</span><span class="mono">${state.time || '—'}</span></div>
+        <div><span class="lbl">Name</span><span>${state.name || '—'}</span></div>
+        <div><span class="lbl">Contact</span><span>${state.phone || state.email || '—'}</span></div>
+      </div>`;
+    nextBtn.textContent = 'Confirm booking';
+  }
+
+  if(state.step === 5){
+    document.querySelectorAll('.step-dot').forEach(d=>d.firstChild.style.width='100%');
+    content.innerHTML = `<div class="success">
+        <div class="mark">✓</div>
+        <h3 style="font-size:22px;">Booking…</h3>
+        <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">One moment.</p>
+      </div>`;
+    document.getElementById('backBtn').style.display='none';
+    nextBtn.style.display='none';
+    submitBooking();
+  }
+}
+
+async function submitBooking(){
+  const content = document.getElementById('stepContent');
+  const payload = {
+    date: state.date, time: state.time,
+    name: state.name, phone: state.phone, email: state.email,
+    service: state.service?.name || '',
+    notes: (state.homeService ? `HOME SERVICE (+₱${HOME_SERVICE_FEE}, client covers transpo). ` : '') + state.notes
+  };
+
+  let result;
+  if(!SCRIPT_URL){
+    // Demo mode — nothing to actually book against
+    result = { ok:true };
+  } else {
+    try{
+      const res = await fetch(SCRIPT_URL, {
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'}, // avoids a CORS preflight against Apps Script
+        body: JSON.stringify(payload)
+      });
+      result = await res.json();
+    }catch(err){
+      result = { ok:false, error:'network' };
+    }
+  }
+
+  if(result.ok){
+    content.innerHTML = `<div class="success">
+        <div class="mark">✓</div>
+        <h3 style="font-size:22px;">Appointment booked</h3>
+        <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">
+          ${state.service?.name} on ${state.dateLabel} at ${state.time}. It's now on the studio calendar${state.email ? ', and a confirmation will be sent to '+state.email : ''}.
+        </p>
+        <button class="btn-secondary" style="margin-top:20px;" onclick="resetBooking()">Book another appointment</button>
+      </div>`;
+  } else if(result.error === 'unavailable'){
+    content.innerHTML = `<div class="success">
+        <h3 style="font-size:22px; color:var(--wine);">That slot was just taken</h3>
+        <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">Someone booked it moments ago. Please pick another time.</p>
+        <button class="btn-secondary" style="margin-top:20px;" onclick="slotsLoaded=false; state.step=2; state.date=null; state.time=null; render();">Choose another time</button>
+      </div>`;
+  } else {
+    content.innerHTML = `<div class="success">
+        <h3 style="font-size:22px; color:var(--wine);">Something went wrong</h3>
+        <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">Please try again, or contact the studio directly to book.</p>
+        <button class="btn-secondary" style="margin-top:20px;" onclick="state.step=4; render();">Back</button>
+      </div>`;
+  }
+}
+
+function stepValid(){
+  if(state.step===1) return !!state.service;
+  if(state.step===2) return !!state.date && !!state.time;
+  if(state.step===3){
+    state.name = document.getElementById('fName').value.trim();
+    state.phone = document.getElementById('fPhone').value.trim();
+    state.email = document.getElementById('fEmail').value.trim();
+    state.notes = document.getElementById('fNotes').value.trim();
+    return state.name && (state.phone || state.email);
+  }
+  return true;
+}
+
+function nextStep(){
+  if(!stepValid()){
+    alert('Please complete this step before continuing.');
+    return;
+  }
+  if(state.step === 4){
+    state.step = 5; // triggers submitBooking() inside render()
+  } else {
+    state.step++;
+  }
+  render();
+  document.getElementById('book').scrollIntoView({block:'start', behavior:'smooth'});
+}
+
+function prevStep(){
+  if(state.step>1){ state.step--; render(); }
+}
+
+function resetBooking(){
+  state = { step:1, service:null, date:null, time:null, name:'', phone:'', email:'', notes:'' };
+  slotsLoaded = false; slotsError = false; openSlots = [];
+  document.getElementById('backBtn').style.display='inline-block';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
