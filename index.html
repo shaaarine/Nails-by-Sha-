@@ -562,7 +562,7 @@ const HOME_SERVICE_FEE = 500; // + client shoulders transportation
 
 /* Paste your deployed Apps Script Web App URL here (see setup-guide.md).
    Leave blank to run in demo mode with made-up open slots. */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZmytQO_Af1DBdzUFTkEaUZH_NfbhvId-eRFPMC1LlxsCZKoWN81uDRIDRB2P8o285Zg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoNPRZF7sa0cAFm215phnjQMYqaeBJDoowpQ0gUfOqDAEhcEtz-QrtEAwwlGLlGGjMWw/exec';
 
 /* ---------------- Render services ---------------- */
 const grid = document.getElementById('serviceGrid');
@@ -623,35 +623,47 @@ function fmtTime12(t){
   return `${h}:${String(m).padStart(2,'0')} ${suffix}`;
 }
 
-async function loadSlots(){
-  if(slotsLoaded) return;
-  if(!SCRIPT_URL){
-    // Demo mode — no backend configured yet
-    const demo = [];
-    let d = new Date();
-    let added = 0;
-    while(added < 8){
-      d.setDate(d.getDate()+1);
-      if(![0,1].includes(d.getDay())){
-        const iso = d.toISOString().slice(0,10);
-        demo.push({date:iso, time:'10:00', duration:240});
-        demo.push({date:iso, time:'15:00', duration:240});
-        added++;
+let slotsPromise = null;
+
+function loadSlots(){
+  if(slotsPromise) return slotsPromise; // already loaded or already in progress — reuse it
+
+  slotsPromise = (async ()=>{
+    if(!SCRIPT_URL){
+      // Demo mode — no backend configured yet
+      const demo = [];
+      let d = new Date();
+      let added = 0;
+      while(added < 8){
+        d.setDate(d.getDate()+1);
+        if(![0,1].includes(d.getDay())){
+          const iso = d.toISOString().slice(0,10);
+          demo.push({date:iso, time:'10:00', duration:240});
+          demo.push({date:iso, time:'15:00', duration:240});
+          added++;
+        }
       }
+      openSlots = demo;
+      slotsLoaded = true;
+      return;
     }
-    openSlots = demo;
-    slotsLoaded = true;
-    return;
-  }
-  try{
-    const res = await fetch(`${SCRIPT_URL}?action=slots`);
-    const data = await res.json();
-    if(data.ok){ openSlots = data.slots; slotsLoaded = true; }
-    else { slotsError = true; }
-  }catch(err){
-    slotsError = true;
-  }
+    try{
+      const res = await fetch(`${SCRIPT_URL}?action=slots`);
+      const data = await res.json();
+      if(data.ok){ openSlots = data.slots; slotsLoaded = true; }
+      else { slotsError = true; }
+    }catch(err){
+      slotsError = true;
+    }
+  })();
+
+  return slotsPromise;
 }
+
+// Start fetching availability the moment the page loads, in the background,
+// instead of waiting until the client reaches Step 2. By the time they get
+// there (after picking a service), the data has often already arrived.
+loadSlots();
 
 function render(){
   // progress dots
@@ -826,7 +838,7 @@ async function submitBooking(){
     content.innerHTML = `<div class="success">
         <h3 style="font-size:22px; color:var(--wine);">That slot was just taken</h3>
         <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">Someone booked it moments ago. Please pick another time.</p>
-        <button class="btn-secondary" style="margin-top:20px;" onclick="slotsLoaded=false; state.step=2; state.date=null; state.time=null; render();">Choose another time</button>
+        <button class="btn-secondary" style="margin-top:20px;" onclick="slotsLoaded=false; slotsPromise=null; loadSlots(); state.step=2; state.date=null; state.time=null; render();">Choose another time</button>
       </div>`;
   } else {
     content.innerHTML = `<div class="success">
@@ -871,7 +883,8 @@ function prevStep(){
 
 function resetBooking(){
   state = { step:1, service:null, date:null, time:null, name:'', phone:'', email:'', instagram:'', notes:'', homeService:false };
-  slotsLoaded = false; slotsError = false; openSlots = [];
+  slotsLoaded = false; slotsError = false; openSlots = []; slotsPromise = null;
+  loadSlots(); // start refetching fresh availability right away, same as on initial page load
   document.getElementById('backBtn').style.display='inline-block';
   render();
 }
