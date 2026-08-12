@@ -355,7 +355,7 @@
     <div class="section-head">
       <p class="eyebrow">Menu</p>
       <h2>Services &amp; pricing</h2>
-      <p>Every appointment includes dry cuticle work, shaping, and a finishing top coat. Home service available around Parañaque City — add ₱500 plus transportation (shouldered by the client).</p>
+      <p>Every appointment includes dry cuticle work, shaping, and a finishing top coat. Home service available around Parañaque City and nearby cities around Metro Manila — add ₱500 plus transportation fee (shouldered by the client).</p>
     </div>
     <div class="svc-grid" id="serviceGrid"></div>
 
@@ -369,7 +369,7 @@
       <h3 class="price-table-title">Removal services</h3>
       <div class="price-table" id="removalTable"></div>
     </div>
-    <p class="menu-note">Removal fees for work done by other nail technicians incur an additional ₱100, due to uncertainty around product quality and the extra care removal requires.</p>
+    <p class="menu-note">Removal fees for work done by other nail technicians incur an additional ₱150, due to uncertainty around product quality and the extra care removal requires.</p>
   </div>
 </section>
 
@@ -625,7 +625,7 @@ function render(){
       <div class="opt-grid" id="svcOpts"></div>
       <label style="display:flex; align-items:center; gap:10px; margin-top:18px; font-size:13.5px; color:var(--ink-soft); cursor:pointer;">
         <input type="checkbox" id="homeServiceChk" ${state.homeService?'checked':''} style="width:16px; height:16px;">
-        Home service (+₱${HOME_SERVICE_FEE}, transportation shouldered by client — Parañaque City area)
+        Home service (+₱${HOME_SERVICE_FEE}, transportation shouldered by client to and from location)
       </label>`;
     const wrap = document.getElementById('svcOpts');
     SERVICES.forEach(s=>{
