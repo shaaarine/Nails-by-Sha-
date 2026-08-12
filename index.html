@@ -614,7 +614,7 @@ function render(){
       <div class="opt-grid" id="svcOpts"></div>
       <label style="display:flex; align-items:center; gap:10px; margin-top:18px; font-size:13.5px; color:var(--ink-soft); cursor:pointer;">
         <input type="checkbox" id="homeServiceChk" ${state.homeService?'checked':''} style="width:16px; height:16px;">
-        Home service (+₱${HOME_SERVICE_FEE}, transportation shouldered by client to andfrom location)
+        Home service (+₱${HOME_SERVICE_FEE}, transportation shouldered by client to and from location)
       </label>`;
     const wrap = document.getElementById('svcOpts');
     SERVICES.forEach(s=>{
