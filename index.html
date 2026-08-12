@@ -296,6 +296,15 @@
   .summary div{display:flex; justify-content:space-between; padding:4px 0;}
   .summary .lbl{color:var(--ink-soft);}
 
+  .qr-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px;}
+  .qr-item{display:flex; flex-direction:column; align-items:center; gap:6px;}
+  .qr-item img{
+    width:100%; aspect-ratio:4/5; object-fit:cover;
+    border:1px solid var(--line); border-radius:var(--radius); background:#fff;
+  }
+  .qr-item span{font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em;}
+  @media (max-width:480px){ .qr-grid{gap:6px;} .qr-item span{font-size:9.5px;} }
+
   .step-nav{display:flex; justify-content:space-between; margin-top:24px;}
   .btn-ghost{background:none; border:none; color:var(--ink-soft); font-size:13px; padding:10px;}
   .btn-ghost:hover{color:var(--ink);}
@@ -553,7 +562,7 @@ const HOME_SERVICE_FEE = 500; // + client shoulders transportation
 
 /* Paste your deployed Apps Script Web App URL here (see setup-guide.md).
    Leave blank to run in demo mode with made-up open slots. */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZmytQO_Af1DBdzUFTkEaUZH_NfbhvId-eRFPMC1LlxsCZKoWN81uDRIDRB2P8o285Zg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoNPRZF7sa0cAFm215phnjQMYqaeBJDoowpQ0gUfOqDAEhcEtz-QrtEAwwlGLlGGjMWw/exec';
 
 /* ---------------- Render services ---------------- */
 const grid = document.getElementById('serviceGrid');
@@ -745,7 +754,21 @@ function render(){
         <div><span class="lbl">Contact</span><span>${state.phone || state.email || '—'}</span></div>
         ${state.instagram ? '<div><span class="lbl">Instagram</span><span>'+state.instagram+'</span></div>' : ''}
       </div>
-      <p class="menu-note" style="background:var(--stone); padding:12px 14px; border-radius:var(--radius);">📌 A <strong>₱500 deposit</strong> is required to confirm this slot. After booking, send a screenshot of your deposit payment to <strong>@sharine.nails</strong> on IG via DM.</p>`;
+      <p class="menu-note" style="background:var(--stone); padding:12px 14px; border-radius:var(--radius);">📌 A <strong>₱500 deposit</strong> is required to confirm this slot. Scan a QR code below to pay, then send a screenshot to <strong>@sharine.nails</strong> on IG via DM. If proof of payment isn't received within 24 hours, this date and time will be forfeited.</p>
+      <div class="qr-grid">
+        <div class="qr-item">
+          <img src="qr-gcash.jpg" alt="GCash QR code" onerror="this.parentElement.style.display='none';">
+          <span>GCash</span>
+        </div>
+        <div class="qr-item">
+          <img src="qr-bpi.jpg" alt="BPI QR code" onerror="this.parentElement.style.display='none';">
+          <span>BPI</span>
+        </div>
+        <div class="qr-item">
+          <img src="qr-gotyme.jpg" alt="GoTyme QR code" onerror="this.parentElement.style.display='none';">
+          <span>GoTyme</span>
+        </div>
+      </div>`;
     nextBtn.textContent = 'Confirm booking';
   }
 
