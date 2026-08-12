@@ -77,7 +77,31 @@
     border-radius:var(--radius); font-size:13px; letter-spacing:0.02em;
   }
   .navlinks .cta:hover{background:var(--wine-deep);}
-  @media (max-width:720px){ .navlinks a:not(.cta){display:none;} }
+  .menu-toggle{
+    display:none; background:none; border:1px solid var(--line); border-radius:var(--radius);
+    width:38px; height:38px; align-items:center; justify-content:center; padding:0;
+  }
+  .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after{
+    content:''; display:block; width:18px; height:2px; background:var(--ink); position:relative;
+    transition:transform .2s;
+  }
+  .menu-toggle span::before{position:absolute; top:-6px;}
+  .menu-toggle span::after{position:absolute; top:6px;}
+  @media (max-width:720px){
+    .navlinks a:not(.cta){
+      display:none; width:100%; padding:12px 0; text-align:center;
+      border-bottom:1px solid var(--line); color:var(--ink);
+    }
+    .navlinks.open a:not(.cta){display:block;}
+    .navlinks{
+      position:fixed; top:64px; left:0; right:0; flex-direction:column; gap:0;
+      background:var(--stone); border-bottom:1px solid var(--line);
+      max-height:0; overflow:hidden; transition:max-height .2s ease;
+    }
+    .navlinks.open{max-height:320px; padding-bottom:14px;}
+    .navlinks .cta{order:99; margin:14px auto 0;}
+    .menu-toggle{display:flex;}
+  }
 
   /* ---------- Hero ---------- */
   .hero{padding:76px 0 40px;}
@@ -121,9 +145,10 @@
   .location-line{display:flex; align-items:center; gap:5px; margin-top:4px;}
   .about-text p{color:var(--ink-soft); margin-top:12px; font-size:15px; line-height:1.6; max-width:58ch;}
   @media (max-width:640px){
-    .about-grid{grid-template-columns:1fr; text-align:center;}
-    .about-photo{max-width:220px; margin:0 auto;}
-    .about-text p{margin-left:auto; margin-right:auto;}
+    .about-grid{grid-template-columns:88px 1fr; gap:16px;}
+    .about-text h2{font-size:22px;}
+    .about-text p{font-size:13.5px; line-height:1.5;}
+    .about-photo-fallback{font-size:9px; padding:6px; gap:3px;}
   }
 
   /* ---------- Section shell ---------- */
@@ -156,7 +181,9 @@
     aspect-ratio:4/5; border-radius:var(--radius); position:relative; overflow:hidden;
     display:flex; align-items:flex-end; padding:14px;
   }
+  .gal-tile img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
   .gal-tile span{
+    position:relative; z-index:1;
     color:#fff; font-size:12px; font-family:'IBM Plex Mono',monospace; letter-spacing:.03em;
     text-shadow:0 1px 4px rgba(0,0,0,.35);
   }
@@ -258,13 +285,14 @@
 <header>
   <nav class="wrap">
     <div class="brand"><span class="mark"></span>Nails by Sha</div>
-    <div class="navlinks">
-      <a href="#services">Services</a>
-      <a href="#policies">Policies</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#book" class="cta">Book now</a>
+    <div class="navlinks" id="navLinks">
+      <a href="#services" onclick="closeMenu()">Services</a>
+      <a href="#policies" onclick="closeMenu()">Policies</a>
+      <a href="#gallery" onclick="closeMenu()">Gallery</a>
+      <a href="#reviews" onclick="closeMenu()">Reviews</a>
+      <a href="#book" class="cta" onclick="closeMenu()">Book now</a>
     </div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" onclick="toggleMenu()"><span></span></button>
   </nav>
 </header>
 
@@ -384,13 +412,13 @@
       <p>Swap these placeholder tiles for real photos of your work — clients book fastest when they can see your actual finish quality.</p>
     </div>
     <div class="gal-grid">
-      <div class="gal-tile g1"><span>Milky nude / round</span></div>
-      <div class="gal-tile g2"><span>Lilac glazed / almond</span></div>
-      <div class="gal-tile g3"><span>Oxblood chrome / coffin</span></div>
-      <div class="gal-tile g4"><span>Champagne shimmer / square</span></div>
-      <div class="gal-tile g5"><span>Sage matte / almond</span></div>
+      <div class="gal-tile g1"><img src="gallery-1.jpg" alt="Milky nude / round" onerror="this.remove();"><span>Milky nude / round</span></div>
+      <div class="gal-tile g2"><img src="gallery-2.jpg" alt="Lilac glazed / almond" onerror="this.remove();"><span>Lilac glazed / almond</span></div>
+      <div class="gal-tile g3"><img src="gallery-3.jpg" alt="Oxblood chrome / coffin" onerror="this.remove();"><span>Oxblood chrome / coffin</span></div>
+      <div class="gal-tile g4"><img src="gallery-4.jpg" alt="Champagne shimmer / square" onerror="this.remove();"><span>Champagne shimmer / square</span></div>
+      <div class="gal-tile g5"><img src="gallery-5.jpg" alt="Sage matte / almond" onerror="this.remove();"><span>Sage matte / almond</span></div>
     </div>
-    <p class="gal-note">→ Replace the <span class="mono">.g1–.g5</span> tiles with <span class="mono">&lt;img&gt;</span> tags pointing to your own photos.</p>
+    <p class="gal-note">→ Upload photos named <span class="mono">gallery-1.jpg</span> through <span class="mono">gallery-5.jpg</span> to the same GitHub folder as this file — they'll appear here automatically. Edit the captions in the code to match. Add more tiles the same way for a bigger gallery.</p>
   </div>
 </section>
 
@@ -440,6 +468,13 @@
 
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
+
+function toggleMenu(){
+  document.getElementById('navLinks').classList.toggle('open');
+}
+function closeMenu(){
+  document.getElementById('navLinks').classList.remove('open');
+}
 
 /* ---------------- Data (edit freely) ---------------- */
 const SERVICES = [
