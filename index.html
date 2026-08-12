@@ -396,7 +396,7 @@
     <div class="quote-grid">
       <div class="quote" style="font-style:normal;">
         <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Deposits</div>
-        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">A <strong>₱500</strong> deposit is required to confirm your slot; it's deducted from your total. Squeeze-in appointments (outside regular open slots) may be accommodated when possible — message @sharine.nails on IG to ask.</p>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">A <strong>₱500</strong> deposit is required to confirm your slot; it's deducted from your total. After booking, send a screenshot of your deposit payment to <strong>@sharine.nails</strong> on IG via DM — your slot isn't fully confirmed until proof of payment is received. Squeeze-in appointments (outside regular open slots) may be accommodated when possible — message @sharine.nails on IG to ask.</p>
       </div>
       <div class="quote" style="font-style:normal;">
         <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Cancellations</div>
@@ -553,7 +553,7 @@ const HOME_SERVICE_FEE = 500; // + client shoulders transportation
 
 /* Paste your deployed Apps Script Web App URL here (see setup-guide.md).
    Leave blank to run in demo mode with made-up open slots. */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZmytQO_Af1DBdzUFTkEaUZH_NfbhvId-eRFPMC1LlxsCZKoWN81uDRIDRB2P8o285Zg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoNPRZF7sa0cAFm215phnjQMYqaeBJDoowpQ0gUfOqDAEhcEtz-QrtEAwwlGLlGGjMWw/exec';
 
 /* ---------------- Render services ---------------- */
 const grid = document.getElementById('serviceGrid');
@@ -744,7 +744,8 @@ function render(){
         <div><span class="lbl">Name</span><span>${state.name || '—'}</span></div>
         <div><span class="lbl">Contact</span><span>${state.phone || state.email || '—'}</span></div>
         ${state.instagram ? '<div><span class="lbl">Instagram</span><span>'+state.instagram+'</span></div>' : ''}
-      </div>`;
+      </div>
+      <p class="menu-note" style="background:var(--stone); padding:12px 14px; border-radius:var(--radius);">📌 A <strong>₱500 deposit</strong> is required to confirm this slot. After booking, send a screenshot of your deposit payment to <strong>@sharine.nails</strong> on IG via DM.</p>`;
     nextBtn.textContent = 'Confirm booking';
   }
 
@@ -793,6 +794,8 @@ async function submitBooking(){
         <h3 style="font-size:22px;">Appointment booked</h3>
         <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">
           ${state.service?.name} on ${state.dateLabel} at ${fmtTime12(state.time)}. Appointment successfully booked — a confirmation message will be sent to your email/IG account in a bit. Changes can only be made by contacting @sharine.nails on IG via DM.
+          <br><br>
+          📌 Don't forget: send a screenshot of your ₱500 deposit payment to <strong>@sharine.nails</strong> on IG via DM to confirm your slot.
         </p>
         <button class="btn-secondary" style="margin-top:20px;" onclick="resetBooking()">Book another appointment</button>
       </div>`;
