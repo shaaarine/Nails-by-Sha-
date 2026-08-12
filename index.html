@@ -130,7 +130,24 @@
 
   /* ---------- About ---------- */
   .about{padding:52px 0 12px;}
-  .about-grid{display:grid; grid-template-columns:220px 1fr; gap:36px; align-items:center;}
+  .about-grid{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    grid-template-areas:
+      "photo eyebrow"
+      "photo name"
+      "photo cred"
+      "photo loc"
+      "photo desc";
+    gap:4px 36px;
+    align-items:start;
+  }
+  .about-grid > .about-photo{grid-area:photo; align-self:center;}
+  .about-eyebrow{grid-area:eyebrow; margin-bottom:6px;}
+  .about-name{grid-area:name; font-size:30px;}
+  .about-cred{grid-area:cred; margin-top:10px; font-size:10px;}
+  .about-loc{grid-area:loc; font-size:9px;}
+  .about-desc{grid-area:desc; color:var(--ink-soft); margin-top:12px; font-size:15px; line-height:1.6; max-width:58ch;}
   .about-photo{
     position:relative; aspect-ratio:1/1.15; border-radius:var(--radius);
     overflow:hidden; background:var(--card); border:1px solid var(--line);
@@ -141,14 +158,22 @@
     text-align:center; flex-direction:column; gap:6px; font-size:12px; color:#fff;
     padding:14px; background:linear-gradient(155deg,#7B2D3E,#4a151f); text-shadow:0 1px 3px rgba(0,0,0,.3);
   }
-  .about-text h2{font-size:30px; margin-top:6px;}
   .location-line{display:flex; align-items:center; gap:5px; margin-top:4px;}
-  .about-text p{color:var(--ink-soft); margin-top:12px; font-size:15px; line-height:1.6; max-width:58ch;}
   @media (max-width:640px){
-    .about-grid{grid-template-columns:88px 1fr; gap:16px;}
-    .about-text h2{font-size:22px;}
-    .about-text p{font-size:13.5px; line-height:1.5;}
-    .about-photo-fallback{font-size:9px; padding:6px; gap:3px;}
+    .about-grid{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "eyebrow"
+        "photo"
+        "name"
+        "cred"
+        "loc"
+        "desc";
+      text-align:center; gap:8px;
+    }
+    .about-grid > .about-photo{max-width:220px; margin:8px auto;}
+    .location-line{justify-content:center;}
+    .about-desc{margin-left:auto; margin-right:auto;}
   }
 
   /* ---------- Section shell ---------- */
@@ -298,20 +323,18 @@
 
 <section class="about">
   <div class="wrap about-grid">
+    <p class="eyebrow about-eyebrow">Meet your nail tech</p>
     <div class="about-photo">
       <img src="your-photo.jpg" alt="Sha, certified Russian manicure nail technician" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
       <div class="about-photo-fallback">Add your photo here<br><span class="mono">(save it as your-photo.jpg next to this file)</span></div>
     </div>
-    <div class="about-text">
-      <p class="eyebrow">Meet your nail tech</p>
-      <h2>Hi, I'm Sha.</h2>
-      <p class="eyebrow" style="margin-top:10px; font-size:10px;">Certified Russian Manicure Specialist</p>
-      <p class="eyebrow location-line" style="font-size:9px;">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        Parañaque City
-      </p>
-      <p>Edit me — a short paragraph about you: how you got into Russian manicure, your certification, how long you've been doing nails, and what clients can expect when they book with you. Two or three sentences is plenty.</p>
-    </div>
+    <h2 class="about-name">Hi, I'm Sha.</h2>
+    <p class="eyebrow about-cred">Certified Russian Manicure Specialist</p>
+    <p class="eyebrow location-line about-loc">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      Parañaque City
+    </p>
+    <p class="about-desc">Edit me — a short paragraph about you: how you got into Russian manicure, your certification, how long you've been doing nails, and what clients can expect when they book with you. Two or three sentences is plenty.</p>
   </div>
 </section>
 
