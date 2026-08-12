@@ -47,7 +47,7 @@
     color:var(--wine);
   }
   a{color:inherit;}
-  button{font-family:inherit; cursor:pointer;}
+  button{font-family:inherit; cursor:pointer; color:inherit; -webkit-tap-highlight-color:transparent;}
   .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
 
   /* ---------- Nav ---------- */
@@ -244,7 +244,7 @@
   }
   .opt-card:hover{border-color:var(--champagne);}
   .opt-card.active{border-color:var(--wine); background:#fff;}
-  .opt-card .name{font-size:14px; font-weight:500;}
+  .opt-card .name{font-size:14px; font-weight:500; color:var(--ink);}
   .opt-card .meta{font-size:12px; color:var(--ink-soft); margin-top:4px;}
 
   .date-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:8px;}
@@ -254,6 +254,7 @@
   }
   .date-card .dow{font-size:10px; color:var(--ink-soft); text-transform:uppercase;}
   .date-card .num{font-size:15px; font-family:'IBM Plex Mono',monospace; margin-top:2px;}
+  .date-card .mon{font-size:9px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; margin-top:1px;}
   .date-card.active{border-color:var(--wine); background:#fff;}
   .date-card:disabled{opacity:.35; cursor:not-allowed;}
 
@@ -354,7 +355,7 @@
     <div class="section-head">
       <p class="eyebrow">Menu</p>
       <h2>Services &amp; pricing</h2>
-      <p>Every appointment includes dry cuticle work, shaping, and a finishing top coat. Home service available around Parañaque City and nearby areas in Metro Manila — add ₱500 plus transportation (shouldered by the client).</p>
+      <p>Every appointment includes dry cuticle work, shaping, and a finishing top coat. Home service available around Parañaque City — add ₱500 plus transportation (shouldered by the client).</p>
     </div>
     <div class="svc-grid" id="serviceGrid"></div>
 
@@ -368,7 +369,7 @@
       <h3 class="price-table-title">Removal services</h3>
       <div class="price-table" id="removalTable"></div>
     </div>
-    <p class="menu-note">Removal fees for work done by other nail technicians incur an additional ₱150, due to uncertainty around product quality and the extra care removal requires.</p>
+    <p class="menu-note">Removal fees for work done by other nail technicians incur an additional ₱100, due to uncertainty around product quality and the extra care removal requires.</p>
   </div>
 </section>
 
@@ -557,7 +558,7 @@ REMOVALS.forEach(r=>{
 });
 
 /* ---------------- Booking flow state ---------------- */
-let state = { step:1, service:null, date:null, time:null, name:'', phone:'', email:'', notes:'', homeService:false };
+let state = { step:1, service:null, date:null, time:null, name:'', phone:'', email:'', instagram:'', notes:'', homeService:false };
 let openSlots = [];       // [{date:'2026-09-03', time:'14:30', duration:240}, ...]
 let slotsLoaded = false;
 let slotsError = false;
@@ -565,6 +566,16 @@ let slotsError = false;
 function fmtDate(iso){
   const d = new Date(iso + 'T00:00:00');
   return d.toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+}
+
+// Converts a 24-hour "HH:mm" string (from the Sheet) to "h:mm AM/PM" for display only.
+// The underlying 24-hour value is still what's sent to the backend for matching/booking.
+function fmtTime12(t){
+  if(!t || !t.includes(':')) return t;
+  let [h, m] = t.split(':').map(Number);
+  const suffix = h >= 12 ? 'PM' : 'AM';
+  h = h % 12; if(h === 0) h = 12;
+  return `${h}:${String(m).padStart(2,'0')} ${suffix}`;
 }
 
 async function loadSlots(){
@@ -614,7 +625,7 @@ function render(){
       <div class="opt-grid" id="svcOpts"></div>
       <label style="display:flex; align-items:center; gap:10px; margin-top:18px; font-size:13.5px; color:var(--ink-soft); cursor:pointer;">
         <input type="checkbox" id="homeServiceChk" ${state.homeService?'checked':''} style="width:16px; height:16px;">
-        Home service (+₱${HOME_SERVICE_FEE}, transportation shouldered by client to and from location)
+        Home service (+₱${HOME_SERVICE_FEE}, transportation shouldered by client — Parañaque City area)
       </label>`;
     const wrap = document.getElementById('svcOpts');
     SERVICES.forEach(s=>{
@@ -654,7 +665,7 @@ function render(){
       const d = new Date(iso + 'T00:00:00');
       const b = document.createElement('button');
       b.className = 'date-card' + (state.date===iso ? ' active':'');
-      b.innerHTML = `<div class="dow">${d.toLocaleDateString(undefined,{weekday:'short'})}</div><div class="num">${d.getDate()}</div>`;
+      b.innerHTML = `<div class="dow">${d.toLocaleDateString(undefined,{weekday:'short'})}</div><div class="num">${d.getDate()}</div><div class="mon">${d.toLocaleDateString(undefined,{month:'short'})}</div>`;
       b.onclick = ()=>{ state.date = iso; state.time = null; state.dateLabel = fmtDate(iso); render(); };
       dwrap.appendChild(b);
     });
@@ -665,7 +676,7 @@ function render(){
       openSlots.filter(s=>s.date===state.date).forEach(s=>{
         const b = document.createElement('button');
         b.className = 'time-card' + (state.time===s.time ? ' active':'');
-        b.textContent = s.time;
+        b.textContent = fmtTime12(s.time);
         b.onclick = ()=>{ state.time = s.time; render(); };
         twrap.appendChild(b);
       });
@@ -675,10 +686,13 @@ function render(){
   if(state.step === 3){
     content.innerHTML = `<div class="step-label">Step 3 · Your details</div>
       <div class="field-row">
-        <div class="field"><label>Full name</label><input id="fName" value="${state.name}" placeholder="Jane Doe"></div>
-        <div class="field"><label>Phone</label><input id="fPhone" value="${state.phone}" placeholder="(555) 555-5555"></div>
+        <div class="field"><label>Full name</label><input id="fName" value="${state.name}" placeholder="Juana Dela Cruz"></div>
+        <div class="field"><label>Phone</label><input id="fPhone" value="${state.phone}" placeholder="0912 345 6789"></div>
       </div>
-      <div class="field"><label>Email</label><input id="fEmail" value="${state.email}" placeholder="jane@email.com"></div>
+      <div class="field-row">
+        <div class="field"><label>Email</label><input id="fEmail" value="${state.email}" placeholder="juanadc@gmail.com"></div>
+        <div class="field"><label>Instagram (optional)</label><input id="fInstagram" value="${state.instagram}" placeholder="@juanadc"></div>
+      </div>
       <div class="field"><label>Notes (optional)</label><textarea id="fNotes" rows="3" placeholder="Preferred shape, allergies, first-time visit, etc.">${state.notes}</textarea></div>`;
   }
 
@@ -690,9 +704,10 @@ function render(){
         <div><span class="lbl">Price</span><span class="mono">₱${state.service?.price ?? '—'}${state.homeService ? ' + ₱'+HOME_SERVICE_FEE+' home service' : ''}</span></div>
         ${state.homeService ? '<div><span class="lbl">Transportation</span><span>Shouldered by client</span></div>' : ''}
         <div><span class="lbl">Date</span><span>${state.dateLabel || '—'}</span></div>
-        <div><span class="lbl">Time</span><span class="mono">${state.time || '—'}</span></div>
+        <div><span class="lbl">Time</span><span class="mono">${state.time ? fmtTime12(state.time) : '—'}</span></div>
         <div><span class="lbl">Name</span><span>${state.name || '—'}</span></div>
         <div><span class="lbl">Contact</span><span>${state.phone || state.email || '—'}</span></div>
+        ${state.instagram ? '<div><span class="lbl">Instagram</span><span>'+state.instagram+'</span></div>' : ''}
       </div>`;
     nextBtn.textContent = 'Confirm booking';
   }
@@ -714,7 +729,7 @@ async function submitBooking(){
   const content = document.getElementById('stepContent');
   const payload = {
     date: state.date, time: state.time,
-    name: state.name, phone: state.phone, email: state.email,
+    name: state.name, phone: state.phone, email: state.email, instagram: state.instagram,
     service: state.service?.name || '',
     notes: (state.homeService ? `HOME SERVICE (+₱${HOME_SERVICE_FEE}, client covers transpo). ` : '') + state.notes
   };
@@ -741,7 +756,7 @@ async function submitBooking(){
         <div class="mark">✓</div>
         <h3 style="font-size:22px;">Appointment booked</h3>
         <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">
-          ${state.service?.name} on ${state.dateLabel} at ${state.time}. It's now on the studio calendar${state.email ? ', and a confirmation will be sent to '+state.email : ''}.
+          ${state.service?.name} on ${state.dateLabel} at ${fmtTime12(state.time)}. It's now on the studio calendar${state.email ? ', and a confirmation will be sent to '+state.email : ''}.
         </p>
         <button class="btn-secondary" style="margin-top:20px;" onclick="resetBooking()">Book another appointment</button>
       </div>`;
@@ -767,6 +782,7 @@ function stepValid(){
     state.name = document.getElementById('fName').value.trim();
     state.phone = document.getElementById('fPhone').value.trim();
     state.email = document.getElementById('fEmail').value.trim();
+    state.instagram = document.getElementById('fInstagram').value.trim();
     state.notes = document.getElementById('fNotes').value.trim();
     return state.name && (state.phone || state.email);
   }
@@ -792,7 +808,7 @@ function prevStep(){
 }
 
 function resetBooking(){
-  state = { step:1, service:null, date:null, time:null, name:'', phone:'', email:'', notes:'' };
+  state = { step:1, service:null, date:null, time:null, name:'', phone:'', email:'', instagram:'', notes:'', homeService:false };
   slotsLoaded = false; slotsError = false; openSlots = [];
   document.getElementById('backBtn').style.display='inline-block';
   render();
