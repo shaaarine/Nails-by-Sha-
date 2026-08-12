@@ -553,7 +553,7 @@ const HOME_SERVICE_FEE = 500; // + client shoulders transportation
 
 /* Paste your deployed Apps Script Web App URL here (see setup-guide.md).
    Leave blank to run in demo mode with made-up open slots. */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZmytQO_Af1DBdzUFTkEaUZH_NfbhvId-eRFPMC1LlxsCZKoWN81uDRIDRB2P8o285Zg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoNPRZF7sa0cAFm215phnjQMYqaeBJDoowpQ0gUfOqDAEhcEtz-QrtEAwwlGLlGGjMWw/exec';
 
 /* ---------------- Render services ---------------- */
 const grid = document.getElementById('serviceGrid');
@@ -785,7 +785,7 @@ async function submitBooking(){
         <div class="mark">✓</div>
         <h3 style="font-size:22px;">Appointment booked</h3>
         <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">
-          ${state.service?.name} on ${state.dateLabel} at ${fmtTime12(state.time)}. It's now on the studio calendar${state.email ? ', and a confirmation will be sent to '+state.email : ''}.
+          ${state.service?.name} on ${state.dateLabel} at ${fmtTime12(state.time)}. Appointment successfully booked — a confirmation message will be sent to your email/IG account in a bit. Changes can only be made by contacting @sharine.nails on IG via DM.
         </p>
         <button class="btn-secondary" style="margin-top:20px;" onclick="resetBooking()">Book another appointment</button>
       </div>`;
