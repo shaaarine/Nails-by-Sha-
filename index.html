@@ -553,7 +553,7 @@ const HOME_SERVICE_FEE = 500; // + client shoulders transportation
 
 /* Paste your deployed Apps Script Web App URL here (see setup-guide.md).
    Leave blank to run in demo mode with made-up open slots. */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZmytQO_Af1DBdzUFTkEaUZH_NfbhvId-eRFPMC1LlxsCZKoWN81uDRIDRB2P8o285Zg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoNPRZF7sa0cAFm215phnjQMYqaeBJDoowpQ0gUfOqDAEhcEtz-QrtEAwwlGLlGGjMWw/exec';
 
 /* ---------------- Render services ---------------- */
 const grid = document.getElementById('serviceGrid');
@@ -600,8 +600,15 @@ function fmtDate(iso){
 // Converts a 24-hour "HH:mm" string (from the Sheet) to "h:mm AM/PM" for display only.
 // The underlying 24-hour value is still what's sent to the backend for matching/booking.
 function fmtTime12(t){
-  if(!t || !t.includes(':')) return t;
-  let [h, m] = t.split(':').map(Number);
+  if(!t) return '';
+  // If it already looks like it contains AM/PM, or isn't a clean 24-hour
+  // "HH:mm" value, just show it as-is instead of risking a broken result.
+  if(/am|pm/i.test(t)) return t.trim();
+  const match = String(t).trim().match(/^(\d{1,2}):(\d{2})/);
+  if(!match) return t;
+  let h = Number(match[1]);
+  const m = Number(match[2]);
+  if(isNaN(h) || isNaN(m)) return t;
   const suffix = h >= 12 ? 'PM' : 'AM';
   h = h % 12; if(h === 0) h = 12;
   return `${h}:${String(m).padStart(2,'0')} ${suffix}`;
