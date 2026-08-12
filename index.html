@@ -104,24 +104,27 @@
   }
   .btn-secondary:hover{border-color:var(--ink);}
 
-  /* Signature: nail-shape swatch strip, doubles as category nav */
-  .shape-strip{
-    display:flex; gap:22px; margin-top:56px; padding-top:28px;
-    border-top:1px solid var(--line); flex-wrap:wrap;
+  /* ---------- About ---------- */
+  .about{padding:52px 0 12px;}
+  .about-grid{display:grid; grid-template-columns:220px 1fr; gap:36px; align-items:center;}
+  .about-photo{
+    position:relative; aspect-ratio:1/1.15; border-radius:var(--radius);
+    overflow:hidden; background:var(--card); border:1px solid var(--line);
   }
-  .shape-item{
-    display:flex; flex-direction:column; align-items:center; gap:10px;
-    background:none; border:none; padding:0; width:78px;
+  .about-photo img{width:100%; height:100%; object-fit:cover; display:block;}
+  .about-photo-fallback{
+    display:none; position:absolute; inset:0; align-items:center; justify-content:center;
+    text-align:center; flex-direction:column; gap:6px; font-size:12px; color:#fff;
+    padding:14px; background:linear-gradient(155deg,#7B2D3E,#4a151f); text-shadow:0 1px 3px rgba(0,0,0,.3);
   }
-  .shape{width:34px; height:44px;}
-  .shape.round{border-radius:50% 50% 20% 20%;}
-  .shape.square{border-radius:3px;}
-  .shape.almond{border-radius:50% 50% 45% 45% / 62% 62% 30% 30%;}
-  .shape.coffin{clip-path:polygon(20% 0,80% 0,100% 78%,72% 100%,28% 100%,0 78%);}
-  .shape.stiletto{clip-path:polygon(50% 0,100% 82%,72% 100%,28% 100%,0 82%);}
-  .shape-item span{font-size:11px; color:var(--ink-soft); text-align:center;}
-  .shape-item:hover .shape{transform:translateY(-3px);}
-  .shape{transition:transform .18s;}
+  .about-text h2{font-size:30px; margin-top:6px;}
+  .location-line{display:flex; align-items:center; gap:5px; margin-top:4px;}
+  .about-text p{color:var(--ink-soft); margin-top:12px; font-size:15px; line-height:1.6; max-width:58ch;}
+  @media (max-width:640px){
+    .about-grid{grid-template-columns:1fr; text-align:center;}
+    .about-photo{max-width:220px; margin:0 auto;}
+    .about-text p{margin-left:auto; margin-right:auto;}
+  }
 
   /* ---------- Section shell ---------- */
   section{padding:72px 0;}
@@ -137,6 +140,15 @@
   .svc-price{font-size:15px; color:var(--wine); white-space:nowrap;}
   .svc-desc{font-size:13.5px; color:var(--ink-soft); line-height:1.5; flex:1;}
   .svc-dur{font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.08em;}
+
+  .price-table-block{margin-top:44px;}
+  .price-table-title{font-size:18px; margin-bottom:14px;}
+  .price-table{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+  .price-row{display:flex; justify-content:space-between; align-items:center; gap:14px; padding:13px 18px; background:var(--card);}
+  .price-row:not(:last-child){border-bottom:1px solid var(--line);}
+  .price-row .item{font-size:14px;}
+  .price-row .amt{font-size:13.5px; color:var(--wine); white-space:nowrap;}
+  .menu-note{font-size:12.5px; color:var(--ink-soft); margin-top:12px; line-height:1.5; max-width:60ch;}
 
   /* ---------- Gallery ---------- */
   .gal-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px;}
@@ -248,40 +260,40 @@
     <div class="brand"><span class="mark"></span>Nails by Sha</div>
     <div class="navlinks">
       <a href="#services">Services</a>
-      <a href="#gallery">Gallery</a>
       <a href="#policies">Policies</a>
+      <a href="#gallery">Gallery</a>
       <a href="#reviews">Reviews</a>
       <a href="#book" class="cta">Book now</a>
     </div>
   </nav>
 </header>
 
+<section class="about">
+  <div class="wrap about-grid">
+    <div class="about-photo">
+      <img src="your-photo.jpg" alt="Sha, certified Russian manicure nail technician" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="about-photo-fallback">Add your photo here<br><span class="mono">(save it as your-photo.jpg next to this file)</span></div>
+    </div>
+    <div class="about-text">
+      <p class="eyebrow">Meet your nail tech</p>
+      <h2>Hi, I'm Sha.</h2>
+      <p class="eyebrow" style="margin-top:10px; font-size:10px;">Certified Russian Manicure Specialist</p>
+      <p class="eyebrow location-line" style="font-size:9px;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        Parañaque City
+      </p>
+      <p>Edit me — a short paragraph about you: how you got into Russian manicure, your certification, how long you've been doing nails, and what clients can expect when they book with you. Two or three sentences is plenty.</p>
+    </div>
+  </div>
+</section>
+
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow">Certified Russian Manicure Specialist · Parañaque City</p>
     <h1>Precision,<br><em>by hand.</em></h1>
     <p>A dry, machine-assisted manicure technique built on control, not shortcuts — every cuticle worked by hand, every edge measured. By appointment only, studio or home service.</p>
     <div class="hero-actions">
       <a href="#book"><button class="btn-primary">Book your appointment</button></a>
       <a href="#services"><button class="btn-secondary">View services &amp; pricing</button></a>
-    </div>
-
-    <div class="shape-strip">
-      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
-        <span class="shape round" style="background:var(--wine)"></span><span>Round</span>
-      </button>
-      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
-        <span class="shape square" style="background:var(--champagne)"></span><span>Square</span>
-      </button>
-      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
-        <span class="shape almond" style="background:var(--sage)"></span><span>Almond</span>
-      </button>
-      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
-        <span class="shape coffin" style="background:var(--ink)"></span><span>Coffin</span>
-      </button>
-      <button class="shape-item" onclick="document.getElementById('services').scrollIntoView()">
-        <span class="shape stiletto" style="background:var(--wine-deep)"></span><span>Stiletto</span>
-      </button>
     </div>
   </div>
 </section>
@@ -291,27 +303,21 @@
     <div class="section-head">
       <p class="eyebrow">Menu</p>
       <h2>Services &amp; pricing</h2>
-      <p>Every appointment includes dry cuticle work, shaping to your preferred silhouette, and a finishing top coat. Home service available around Parañaque City — add ₱500 plus transportation (shouldered by the client). Edit prices freely — these are placeholders.</p>
+      <p>Every appointment includes dry cuticle work, shaping, and a finishing top coat. Home service available around Parañaque City — add ₱500 plus transportation (shouldered by the client).</p>
     </div>
     <div class="svc-grid" id="serviceGrid"></div>
-  </div>
-</section>
 
-<section id="gallery">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Portfolio</p>
-      <h2>Recent sets</h2>
-      <p>Swap these placeholder tiles for real photos of your work — clients book fastest when they can see your actual finish quality.</p>
+    <div class="price-table-block">
+      <h3 class="price-table-title">Add-ons</h3>
+      <div class="price-table" id="addonTable"></div>
     </div>
-    <div class="gal-grid">
-      <div class="gal-tile g1"><span>Milky nude / round</span></div>
-      <div class="gal-tile g2"><span>Lilac glazed / almond</span></div>
-      <div class="gal-tile g3"><span>Oxblood chrome / coffin</span></div>
-      <div class="gal-tile g4"><span>Champagne shimmer / square</span></div>
-      <div class="gal-tile g5"><span>Sage matte / almond</span></div>
+    <p class="menu-note">Additional charges may apply depending on the design — please consult via DM before your appointment. Prices listed are base prices only.</p>
+
+    <div class="price-table-block">
+      <h3 class="price-table-title">Removal services</h3>
+      <div class="price-table" id="removalTable"></div>
     </div>
-    <p class="gal-note">→ Replace the <span class="mono">.g1–.g5</span> tiles with <span class="mono">&lt;img&gt;</span> tags pointing to your own photos.</p>
+    <p class="menu-note">Removal fees for work done by other nail technicians incur an additional ₱100, due to uncertainty around product quality and the extra care removal requires.</p>
   </div>
 </section>
 
@@ -324,36 +330,23 @@
     </div>
     <div class="quote-grid">
       <div class="quote" style="font-style:normal;">
-        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Booking &amp; deposits</div>
+        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Deposits</div>
         <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">A <strong>₱500</strong> deposit is required to confirm your slot; it's deducted from your total. Squeeze-in appointments (outside regular open slots) may be accommodated when possible — message @sharine.nails on IG to ask.</p>
       </div>
       <div class="quote" style="font-style:normal;">
-        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Cancellations &amp; late arrivals</div>
-        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Please give 24-48 hour notice as possible if you need to cancel or reschedule — late cancellations may forfeit the deposit. <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">A 15 minute grace period applies for late arrivals. Beyond that, late fees will be applied.</p><p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">16-20 minutes late: ₱300 late fee</p><p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">21-30 minutes late: ₱500 late fee</p> <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">If the client is around 30+ minutes - 1 hour late, the appointment may need to be rescheduled to protect the next client's slot.</p></p>
+        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Cancellations</div>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Please give 24–48 hours notice if you need to cancel or reschedule — late cancellations may forfeit the deposit.</p>
+      </div>
+      <div class="quote" style="font-style:normal;">
+        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Late arrivals</div>
+        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">A 15-minute grace period applies. Beyond that: 16–20 minutes late is a <strong>₱300</strong> late fee, 21–30 minutes late is a <strong>₱500</strong> late fee. Around 30 minutes to 1 hour late, the appointment may need to be rescheduled to protect the next client's slot.</p>
       </div>
       <div class="quote" style="font-style:normal;">
         <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Home service</div>
         <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Available around Parañaque City and nearby cities around Metro Manila. Add <strong>₱500</strong> on top of the service price for home service; transportation is shouldered by the client (Grab/InDrive fare to and from location OR pickup at my location — whichever's more convenient for you).</p>
       </div>
-      <div class="quote" style="font-style:normal;">
-        <div class="name" style="font-family:'Fraunces',serif; font-size:16px; margin-bottom:8px;">Design &amp; nail inspo</div>
-        <p style="font-style:normal; font-family:'Public Sans',sans-serif; font-size:14px; line-height:1.6;">Send your design or nail inspo photos via DM to <strong>@sharine.nails</strong> on IG, 24–48 hours before your appointment. Not sure what something costs? Send the photo and a quote will be provided.</p>
-      </div>
     </div>
-  </div>
-</section>
-
-<section id="reviews">
-  <div class="wrap">
-    <div class="section-head">
-      <p class="eyebrow">Word of mouth</p>
-      <h2>What clients say</h2>
-    </div>
-    <div class="quote-grid">
-      <div class="quote"><p>"Still obsessed with how clean my cuticles are from russian manicure"</p><div class="who">— G.B.F, Russian Manicure with Hard Gel Overlay</div></div>
-      <div class="quote"><p>"Travel and golf proof nails by Sha! Super love that everything'sstill intact after 6 weeks!!!"</p><div class="who">— A.G, Russian Manicure with Softgel Extensions</div></div>
-      <div class="quote"><p>"Looks like my natural nails even if they're extensions, also not bulky at all! Love it so much, I'm so addicted to getting a new set every month <3"</p><div class="who">— R.E, Russian Manicure with Hard Gel Extensions</div></div>
-    </div>
+    <p class="menu-note" style="margin-top:22px; text-align:center;">Send your design or nail inspo photos via DM to <strong>@sharine.nails</strong> on IG, 24–48 hours before your appointment. Not sure what something costs? Send the photo and a quote will be provided.</p>
   </div>
 </section>
 
@@ -379,6 +372,38 @@
         <button class="btn-ghost" id="backBtn" onclick="prevStep()">← Back</button>
         <button class="btn-primary" id="nextBtn" onclick="nextStep()">Continue</button>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Portfolio</p>
+      <h2>Recent sets</h2>
+      <p>Swap these placeholder tiles for real photos of your work — clients book fastest when they can see your actual finish quality.</p>
+    </div>
+    <div class="gal-grid">
+      <div class="gal-tile g1"><span>Milky nude / round</span></div>
+      <div class="gal-tile g2"><span>Lilac glazed / almond</span></div>
+      <div class="gal-tile g3"><span>Oxblood chrome / coffin</span></div>
+      <div class="gal-tile g4"><span>Champagne shimmer / square</span></div>
+      <div class="gal-tile g5"><span>Sage matte / almond</span></div>
+    </div>
+    <p class="gal-note">→ Replace the <span class="mono">.g1–.g5</span> tiles with <span class="mono">&lt;img&gt;</span> tags pointing to your own photos.</p>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Word of mouth</p>
+      <h2>What clients say</h2>
+    </div>
+    <div class="quote-grid">
+      <div class="quote"><p>"Still obsessed with how clean my cuticles are from russian manicure"</p><div class="who">— G.B.F, Russian Manicure with Hard Gel Overlay</div></div>
+      <div class="quote"><p>"Travel and golf proof nails by Sha! Super love that everything'sstill intact after 6 weeks!!!"</p><div class="who">— A.G, Russian Manicure with Softgel Extensions</div></div>
+      <div class="quote"><p>"Looks like my natural nails even if they're extensions, also not bulky at all! Love it so much, I'm so addicted to getting a new set every month <3"</p><div class="who">— R.E, Russian Manicure with Hard Gel Extensions</div></div>
     </div>
   </div>
 </section>
@@ -418,13 +443,24 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 /* ---------------- Data (edit freely) ---------------- */
 const SERVICES = [
-  {id:'rm-new', name:'Russian Manicure (cleaning only)', dur:'1-1:30 hrs', price:1190, desc:'Full dry cuticle cleaning and nail shaping only'},
-  {id:'rm-gel', name:'Russian Manicure + Hard Gel Overlay', dur:'3hrs', price:1690, desc:'Russian manicure cleaning plus a nude/whitehard gel application.'},
-  {id:'rm-fill', name:'Fill / Rebalance', dur:'60 min', price:900, desc:'For returning clients within 3 weeks of their last set.'},
-  {id:'chrome', name:'Chrome or Cat-Eye Finish', dur:'+20 min', price:300, desc:'Add-on to any gel service.'},
-  {id:'soakoff', name:'Soak-Off Only', dur:'30 min', price:300, desc:'Gel removal without a new service.'},
-  {id:'reset', name:'Full Reset (Soak-off + New Set)', dur:'105 min', price:1600, desc:'Old gel removed, nails reset, and a fresh Russian manicure applied.'}
+  {id:'rm-clean', name:'Russian Manicure (Cleaning Only)', dur:'1-1:30 hrs', price:1190, desc:'Full dry cuticle cleaning and nail shaping — no gel.'},
+  {id:'rm-overlay', name:'Russian Manicure with Hard Gel Overlay', dur:'3 hrs', price:1690, desc:'Russian manicure plus a full hard gel overlay.'},
+  {id:'rm-ext', name:'Russian Manicure with Hard Gel Extensions', dur:'3-3:30 hrs', price:1890, desc:'Russian manicure plus hard gel extensions to your preferred length and shape.'}
 ];
+
+const ADDONS = [
+  {name:'Solid Color / French Tips', amt:'₱500'},
+  {name:'Cat-Eye', amt:'₱300'},
+  {name:'Chrome, 3D Art, Line Art', amt:'₱200–400'},
+  {name:'Nail Art (Mix & Match Styles)', amt:'₱800–1000'},
+  {name:'Nail Reconstruction / Extension (per nail)', amt:'₱100'}
+];
+
+const REMOVALS = [
+  {name:'Builder / Hard Gel Removal (my work)', amt:'₱350'},
+  {name:'Builder Gel / Soft Gel Extension Removal (not my work)', amt:'₱500'}
+];
+
 const HOME_SERVICE_FEE = 500; // + client shoulders transportation
 
 /* Paste your deployed Apps Script Web App URL here (see setup-guide.md).
@@ -444,6 +480,22 @@ SERVICES.forEach(s=>{
     <div class="svc-dur mono">${s.dur}</div>
     <div class="svc-desc">${s.desc}</div>`;
   grid.appendChild(el);
+});
+
+const addonWrap = document.getElementById('addonTable');
+ADDONS.forEach(a=>{
+  const row = document.createElement('div');
+  row.className = 'price-row';
+  row.innerHTML = `<span class="item">${a.name}</span><span class="amt mono">${a.amt}</span>`;
+  addonWrap.appendChild(row);
+});
+
+const removalWrap = document.getElementById('removalTable');
+REMOVALS.forEach(r=>{
+  const row = document.createElement('div');
+  row.className = 'price-row';
+  row.innerHTML = `<span class="item">${r.name}</span><span class="amt mono">${r.amt}</span>`;
+  removalWrap.appendChild(row);
 });
 
 /* ---------------- Booking flow state ---------------- */
