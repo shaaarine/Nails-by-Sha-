@@ -789,7 +789,7 @@ function render(){
     content.innerHTML = `<div class="success">
         <div class="mark">✓</div>
         <h3 style="font-size:22px;">Booking…</h3>
-        <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">One moment.</p>
+        <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">This can take up to 10–15 seconds — please don't close this tab.</p>
       </div>`;
     document.getElementById('backBtn').style.display='none';
     nextBtn.style.display='none';
@@ -842,8 +842,8 @@ async function submitBooking(){
       </div>`;
   } else {
     content.innerHTML = `<div class="success">
-        <h3 style="font-size:22px; color:var(--wine);">Something went wrong</h3>
-        <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">Please try again, or contact the studio directly to book.</p>
+        <h3 style="font-size:22px; color:var(--wine);">Taking longer than expected</h3>
+        <p style="color:var(--ink-soft); margin-top:8px; font-size:14px;">This sometimes happens on a slow connection even when the booking actually went through. Please check your email for a confirmation before trying again — if it didn't arrive, message <strong>@sharine.nails</strong> on IG to confirm your slot, or try booking again.</p>
         <button class="btn-secondary" style="margin-top:20px;" onclick="state.step=4; render();">Back</button>
       </div>`;
   }
