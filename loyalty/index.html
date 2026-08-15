@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nails by Sha — Loyalty Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF3EC;
+    --cream-2:#F1E8DD;
+    --paper:#FFFDFB;
+    --mocha:#3E2B24;
+    --mocha-soft:#7A6355;
+    --rose:#C98CA0;
+    --rose-deep:#A9647F;
+    --blush:#F1DCE2;
+    --gold:#B99358;
+    --gold-light:#EFDFB8;
+    --taupe:#DED2C8;
+    --line: rgba(62,43,36,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--cream-2);
+    font-family:'Jost', sans-serif;
+    color:var(--mocha);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    padding: 28px 16px 60px;
+  }
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--mocha-soft);
+    font-weight:500;
+  }
+  .display{
+    font-family:'Fraunces', serif;
+  }
+
+  /* ---------- Navigator ---------- */
+  .navigator{
+    width:100%;
+    max-width:390px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .nav-btn{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--mocha);
+    font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .nav-btn:hover{ background:var(--blush); transform: translateY(-1px); }
+  .nav-btn:active{ transform: scale(0.95); }
+  .nav-label{
+    flex:1;
+    text-align:center;
+    font-size:12px;
+  }
+  .nav-label .screen-name{
+    display:block;
+    font-family:'Fraunces', serif;
+    font-size:14px;
+    margin-top:1px;
+  }
+  select.jump{
+    max-width:390px;
+    width:100%;
+    margin-bottom:14px;
+    padding:9px 12px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--mocha-soft);
+    font-family:'Jost', sans-serif;
+    font-size:12px;
+    letter-spacing:.03em;
+  }
+
+  /* ---------- Phone frame ---------- */
+  .phone{
+    width:100%;
+    max-width:390px;
+    background: var(--paper);
+    border-radius:38px;
+    border:8px solid var(--mocha);
+    box-shadow: 0 30px 60px -20px rgba(62,43,36,0.35);
+    overflow:hidden;
+    position:relative;
+    min-height:720px;
+  }
+  .notch{
+    position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:120px; height:22px; background:var(--mocha);
+    border-radius:0 0 16px 16px; z-index:5;
+  }
+  .screen{
+    padding:44px 22px 26px;
+    min-height:720px;
+    display:none;
+    flex-direction:column;
+    animation: fade .35s ease;
+  }
+  .screen.active{ display:flex; }
+  @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------- shared bits ---------- */
+  .brandmark{
+    text-align:center;
+    margin-bottom:6px;
+  }
+  .brandmark .word{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    letter-spacing:0.02em;
+    font-weight:500;
+  }
+  .brandmark .sub{
+    font-size:10px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--rose-deep);
+    margin-top:2px;
+  }
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:24px;
+    margin:14px 0 4px;
+    line-height:1.15;
+  }
+  p.lead{
+    font-size:13.5px;
+    color:var(--mocha-soft);
+    line-height:1.55;
+    margin:0 0 18px;
+  }
+  .field{
+    margin-bottom:13px;
+  }
+  .field label{
+    display:block;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--mocha-soft);
+    margin-bottom:6px;
+  }
+  .field label .req{ color:var(--rose-deep); }
+  .field input{
+    width:100%;
+    padding:12px 13px;
+    border-radius:11px;
+    border:1px solid var(--line);
+    background:var(--cream);
+    font-family:'Jost', sans-serif;
+    font-size:14px;
+    color:var(--mocha);
+  }
+  .field input::placeholder{ color:#B8A99B; }
+  .checkline{
+    display:flex; align-items:flex-start; gap:10px;
+    background:var(--blush);
+    border-radius:12px;
+    padding:12px 13px;
+    margin: 4px 0 18px;
+  }
+  .checkline input{ margin-top:3px; accent-color:var(--rose-deep); }
+  .checkline .txt{ font-size:12.5px; line-height:1.5; color:var(--mocha); }
+  .checkline .txt b{ color:var(--rose-deep); }
+
+  .btn-primary{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:13px;
+    background: var(--mocha);
+    color:var(--cream);
+    font-family:'Jost', sans-serif;
+    font-size:13.5px;
+    letter-spacing:0.04em;
+    font-weight:500;
+    cursor:pointer;
+    margin-top:4px;
+  }
+  .btn-secondary{
+    width:100%;
+    padding:14px;
+    border-radius:13px;
+    border:1px solid var(--mocha);
+    background:transparent;
+    color:var(--mocha);
+    font-family:'Jost', sans-serif;
+    font-size:13px;
+    letter-spacing:0.03em;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  .btn-ghost{
+    background:none; border:none; color:var(--rose-deep);
+    font-family:'Jost', sans-serif; font-size:12.5px;
+    text-decoration:underline; cursor:pointer; margin-top:14px;
+  }
+
+  /* ---------- Registration ---------- */
+  .footnote{
+    text-align:center; font-size:11px; color:var(--mocha-soft);
+    margin-top:16px; line-height:1.5;
+  }
+
+  /* ---------- Success ---------- */
+  .success-wrap{
+    flex:1; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center;
+  }
+  .success-icon{
+    width:60px; height:60px; border-radius:50%;
+    background:var(--gold-light);
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; margin-bottom:18px;
+    color:var(--gold);
+  }
+
+  /* ---------- Loyalty card ---------- */
+  .card-wrap{ flex:1; display:flex; flex-direction:column; }
+  .membership-card{
+    background: linear-gradient(160deg, #FFFDFB 0%, #F6ECE3 60%, #F1DCE2 130%);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:22px 20px 20px;
+    position:relative;
+    overflow:hidden;
+    box-shadow: 0 14px 30px -14px rgba(62,43,36,0.28);
+  }
+  .membership-card::after{
+    content:"";
+    position:absolute; right:-40px; top:-40px;
+    width:130px; height:130px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(201,140,160,0.28), transparent 70%);
+  }
+  .card-top{ display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1;}
+  .card-brand{ font-family:'Fraunces', serif; font-size:15px; letter-spacing:0.03em; }
+  .card-brand .tiny{ display:block; font-family:'Jost',sans-serif; font-size:9px; letter-spacing:0.18em; color:var(--rose-deep); margin-top:2px; }
+  .client-id{ font-size:9.5px; color:var(--mocha-soft); letter-spacing:0.05em; }
+  .client-name{ font-family:'Fraunces', serif; font-size:21px; margin-top:16px; position:relative; z-index:1; }
+  .client-ig{ font-size:12px; color:var(--rose-deep); margin-top:2px; position:relative; z-index:1;}
+
+  .progress-label{
+    font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--mocha-soft); margin-top:20px; position:relative; z-index:1;
+  }
+  .drops-grid{
+    margin-top:10px; position:relative; z-index:1;
+  }
+  .drops-line{
+    display:flex; justify-content:space-between; margin-bottom:14px;
+  }
+  .drops-line:last-child{ margin-bottom:0; }
+  .drop-wrap{
+    display:flex; flex-direction:column; align-items:center; width:20%;
+  }
+  .drop{
+    width:22px; height:22px;
+    border-radius:50%;
+    background: var(--taupe);
+    flex-shrink:0;
+    position:relative;
+  }
+  .drop.filled{ background: var(--rose-deep); }
+  .drop.reward{ background: var(--gold); width:26px; height:26px; }
+  .drop.redeemed::after{
+    content:"✦";
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:11px;
+  }
+  .drop-caption{
+    margin-top:6px;
+    font-size:8.5px;
+    letter-spacing:0.03em;
+    text-align:center;
+    line-height:1.25;
+    color:var(--mocha-soft);
+    min-height:22px;
+  }
+  .drop-caption b{
+    display:block;
+    color:var(--gold);
+    font-size:9.5px;
+  }
+  .visits-count{
+    font-family:'Fraunces', serif; font-size:15px; margin-top:12px; position:relative; z-index:1;
+  }
+  .visits-count b{ font-size:19px; }
+
+  .reward-banner{
+    margin-top:16px;
+    background: var(--mocha);
+    color:var(--cream);
+    border-radius:13px;
+    padding:13px 15px;
+    display:flex; align-items:center; gap:10px;
+    position:relative; z-index:1;
+  }
+  .reward-banner .ic{ font-size:18px; }
+  .reward-banner .rt{ font-size:13px; line-height:1.35; }
+  .reward-banner .rt b{ font-family:'Fraunces', serif; font-size:14.5px; display:block; }
+
+  .next-milestone{
+    margin-top:10px; font-size:11.5px; color:var(--mocha-soft); position:relative; z-index:1;
+  }
+  .next-milestone b{ color:var(--rose-deep); }
+
+  .qr-block{
+    margin-top:20px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px;
+    text-align:center;
+  }
+  .qr-code{
+    width:150px; height:150px; margin:0 auto 10px;
+    background:
+      repeating-linear-gradient(0deg, #3E2B24 0 3px, transparent 3px 6px),
+      repeating-linear-gradient(90deg, #3E2B24 0 3px, transparent 3px 6px);
+    background-blend-mode:multiply;
+    border-radius:8px;
+    position:relative;
+    opacity:0.88;
+  }
+  .qr-code::before{
+    content:"";
+    position:absolute; inset:0; margin:auto;
+    width:38px; height:38px; background:var(--paper);
+    border:3px solid var(--mocha);
+  }
+  .qr-hint{ font-size:11px; color:var(--mocha-soft); }
+
+  .card-links{ display:flex; gap:10px; margin-top:16px; }
+  .card-links .link-btn{
+    flex:1; text-align:center; padding:11px 8px;
+    border-radius:11px; border:1px solid var(--line);
+    background:var(--cream); font-size:11.5px; color:var(--mocha);
+    cursor:pointer;
+  }
+
+  /* ---------- Profile / visit timeline ---------- */
+  .timeline{ margin-top:6px; }
+  .visit-row{
+    display:flex; align-items:center; gap:12px;
+    padding:10px 4px;
+    border-bottom:1px solid var(--line);
+  }
+  .visit-row:last-child{ border-bottom:none; }
+  .visit-num{
+    width:30px; height:30px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-family:'Fraunces', serif;
+    background:var(--taupe); color:var(--paper); flex-shrink:0;
+  }
+  .visit-num.done{ background:var(--rose-deep); color:#fff; }
+  .visit-num.reward{ background:var(--gold); color:#fff; }
+  .visit-num.locked{ background:var(--cream-2); color:var(--mocha-soft); border:1px solid var(--line); }
+  .visit-text{ flex:1; }
+  .visit-text .main{ font-size:13px; }
+  .visit-text .sub{ font-size:10.5px; color:var(--mocha-soft); }
+  .visit-tag{
+    font-size:9.5px; letter-spacing:0.06em; text-transform:uppercase;
+    padding:4px 8px; border-radius:20px;
+  }
+  .visit-tag.unlocked{ background:var(--gold-light); color:#8a6a2f; }
+  .visit-tag.redeemed{ background:var(--taupe); color:var(--mocha-soft); }
+  .visit-tag.locked{ color:#B8A99B; }
+
+  /* ---------- PWA ---------- */
+  .pwa-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; text-align:center; justify-content:center; }
+  .pwa-phone-illustration{
+    width:110px; height:200px; border-radius:20px; border:5px solid var(--mocha);
+    background: linear-gradient(160deg,#fff,var(--blush));
+    margin-bottom:20px; position:relative;
+  }
+  .pwa-icon{
+    position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+    width:34px; height:34px; border-radius:9px; background:var(--mocha);
+    display:flex; align-items:center; justify-content:center; color:var(--gold-light); font-size:14px;
+  }
+  .steps{ text-align:left; width:100%; margin-top:6px; }
+  .step-row{ display:flex; gap:12px; margin-bottom:14px; align-items:flex-start; }
+  .step-num{
+    width:22px; height:22px; border-radius:50%; background:var(--rose-deep); color:#fff;
+    font-size:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;
+  }
+  .step-row .txt{ font-size:13px; line-height:1.4; }
+
+  /* ---------- Admin ---------- */
+  .admin-header{
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;
+  }
+  .admin-badge{
+    font-size:9.5px; letter-spacing:0.12em; text-transform:uppercase;
+    background:var(--mocha); color:var(--gold-light); padding:5px 10px; border-radius:20px;
+  }
+  .admin-client-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:18px;
+  }
+  .admin-avatar{
+    width:46px; height:46px; border-radius:50%; background:var(--blush); color:var(--rose-deep);
+    display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-size:17px;
+  }
+  .admin-name-row{ display:flex; align-items:center; gap:12px; }
+  .admin-name{ font-family:'Fraunces', serif; font-size:18px; }
+  .admin-ig{ font-size:12px; color:var(--rose-deep); }
+
+  .bar-track{
+    height:8px; border-radius:6px; background:var(--taupe); margin-top:16px; overflow:hidden;
+  }
+  .bar-fill{ height:100%; background:var(--rose-deep); border-radius:6px; }
+
+  .reward-list{ margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+  .reward-item{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 12px; border-radius:11px; background:var(--cream); font-size:12.5px;
+  }
+  .reward-item.locked{ opacity:0.55; }
+  .reward-item.selectable{ cursor:pointer; border:1.5px solid transparent; }
+  .reward-item.selectable.selected{ border:1.5px solid var(--gold); }
+  .reward-item .pill{
+    font-size:9.5px; letter-spacing:0.05em; text-transform:uppercase;
+    padding:4px 9px; border-radius:20px; background:var(--gold-light); color:#8a6a2f;
+  }
+  .reward-item.locked .pill{ background:var(--taupe); color:var(--mocha-soft); }
+
+  .admin-actions{ margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .admin-actions .a-btn{
+    padding:13px 8px; border-radius:12px; text-align:center; font-size:12px; cursor:pointer;
+  }
+  .a-btn.stamp{ background:var(--mocha); color:var(--cream); }
+  .a-btn.redeem{ background:var(--gold); color:#fff; }
+  .a-btn.history{ background:var(--paper); border:1px solid var(--line); color:var(--mocha); }
+  .a-btn.edit{ background:var(--paper); border:1px solid var(--line); color:var(--mocha); }
+
+  /* ---------- confirm modal look ---------- */
+  .modal-wrap{ flex:1; display:flex; flex-direction:column; justify-content:flex-end; }
+  .scrim{ flex:1; }
+  .modal-sheet{
+    background:var(--paper); border-radius:20px 20px 0 0; padding:24px 22px 28px;
+    box-shadow:0 -10px 30px rgba(62,43,36,0.15);
+  }
+  .modal-title{ font-family:'Fraunces', serif; font-size:18px; margin-bottom:6px; }
+  .modal-sub{ font-size:12.5px; color:var(--mocha-soft); margin-bottom:20px; }
+  .modal-actions{ display:flex; gap:10px; }
+  .modal-actions button{ flex:1; }
+
+  /* ---------- unlock celebration ---------- */
+  .celebrate-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .confetti-drop{
+    width:16px; height:19px; border-radius:50% 50% 50% 0; position:absolute;
+  }
+  .big-num{ font-family:'Fraunces', serif; font-size:52px; margin:8px 0 2px; color:var(--rose-deep); }
+  .big-num .of{ font-size:24px; color:var(--mocha-soft); }
+
+  .tag-earned{ font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--mocha-soft); }
+
+  ::selection{ background:var(--blush); }
+</style>
+</head>
+<body>
+
+<div class="navigator">
+  <button class="nav-btn" onclick="go(-1)">←</button>
+  <div class="nav-label">
+    <span id="nav-index">1 / 9</span>
+    <span class="screen-name" id="nav-name">Registration</span>
+  </div>
+  <button class="nav-btn" onclick="go(1)">→</button>
+</div>
+<select class="jump" id="jump" onchange="jumpTo(this.value)"></select>
+
+<div class="phone">
+  <div class="notch"></div>
+
+  <!-- 1. REGISTRATION -->
+  <section class="screen" data-name="Registration">
+    <div class="brandmark">
+      <div class="word">Nails by Sha</div>
+      <div class="sub">Loyalty Program</div>
+    </div>
+    <h1 class="title">Join the loyalty list</h1>
+    <p class="lead">Earn a stamp for every visit. Unlock 20% off at visit 5, 30% at visit 7, and 50% at visit 10 — automatically.</p>
+
+    <div class="field"><label>Full name <span class="req">*</span></label><input id="reg-name" placeholder="Jane Doe"></div>
+    <div class="field"><label>Phone number <span class="req">*</span></label><input id="reg-phone" placeholder="0917 000 0000"></div>
+    <div class="field"><label>Email address <span class="req">*</span></label><input id="reg-email" placeholder="jane@email.com"></div>
+    <div class="field"><label>Instagram username <span class="req">*</span></label><input id="reg-ig" placeholder="@janedoe"></div>
+    <div class="field"><label>Birthday <span style="color:#B8A99B">(optional)</span></label><input id="reg-bday" placeholder="MM / DD"></div>
+
+    <div class="checkline">
+      <input type="checkbox" id="reg-followed" checked>
+      <div class="txt">I follow <b>@sharine.nails</b> on Instagram — required to join, since that's how Sharine reaches clients about their appointments.</div>
+    </div>
+
+    <div id="reg-error" style="display:none;color:#A9647F;font-size:12px;margin-bottom:10px;"></div>
+    <button class="btn-primary" id="reg-submit-btn" onclick="handleRegister()">Create My Loyalty Card</button>
+    <div class="footnote">By joining, you agree to receive appointment &amp; reward updates from Nails by Sha.</div>
+  </section>
+
+  <!-- 2. SUCCESS -->
+  <section class="screen" data-name="Registration Success">
+    <div class="success-wrap">
+      <div class="success-icon">✓</div>
+      <div class="eyebrow">Welcome to</div>
+      <div class="display" style="font-size:24px;margin:2px 0 10px;">Nails by Sha</div>
+      <p class="lead" style="max-width:260px;" id="success-msg">Your loyalty card is ready. Save it to your Home Screen so it's one tap away at every appointment.</p>
+      <button class="btn-primary" onclick="jumpTo(2)">View My Card</button>
+      <button class="btn-ghost" onclick="jumpTo(4)">How do I save this? →</button>
+    </div>
+  </section>
+
+  <!-- 3. DIGITAL LOYALTY CARD -->
+  <section class="screen" data-name="Digital Loyalty Card">
+    <div class="card-wrap">
+      <div id="card-mode-banner" style="display:none;font-size:10.5px;text-align:center;background:var(--blush);color:var(--rose-deep);border-radius:9px;padding:6px;margin-bottom:10px;letter-spacing:.03em;"></div>
+      <div class="membership-card">
+        <div class="card-top">
+          <div class="card-brand">Nails by Sha<span class="tiny">MEMBER CARD</span></div>
+          <div class="client-id" id="card-client-id">SHA-0001</div>
+        </div>
+        <div class="client-name" id="card-name">Jane Doe</div>
+        <div class="client-ig" id="card-ig">@janedoe</div>
+
+        <div class="progress-label">Your loyalty progress</div>
+        <div class="drops-grid" id="dropsGrid"></div>
+        <div class="visits-count" style="margin-top:14px;"><b id="card-stamps">7</b> / 10 visits</div>
+
+        <div class="reward-banner" id="card-reward-banner">
+          <div class="ic">🎁</div>
+          <div class="rt"><b id="card-reward-title">20% &amp; 30% off unlocked</b><span id="card-reward-sub">Ready to use on your next visit</span></div>
+        </div>
+        <div class="next-milestone" id="card-next-milestone">Next milestone: <b>50% off at visit 10</b> · 3 visits to go</div>
+      </div>
+
+      <div class="qr-block">
+        <div class="qr-code"></div>
+        <div class="qr-hint">Show this to Sharine at check-in</div>
+      </div>
+
+      <div class="card-links">
+        <div class="link-btn" onclick="jumpTo(3)">Visit History</div>
+        <div class="link-btn" onclick="jumpTo(4)">Save to Home Screen</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. CLIENT PROFILE / TIMELINE -->
+  <section class="screen" data-name="Client Progress Detail">
+    <div class="eyebrow" id="tl-idline">Jane Doe · @janedoe</div>
+    <h1 class="title" style="font-size:20px;">Your visit history</h1>
+    <p class="lead" id="tl-summary">7 of 10 visits complete. Two rewards are ready whenever you are.</p>
+    <div class="timeline" id="timelineRows"></div>
+  </section>
+
+  <!-- 5. PWA / HOME SCREEN -->
+  <section class="screen" data-name="Save to Home Screen">
+    <div class="pwa-wrap">
+      <div class="eyebrow">Save your loyalty card</div>
+      <div class="pwa-phone-illustration"><div class="pwa-icon">NS</div></div>
+      <p class="lead" style="max-width:270px;">Add this page to your Home Screen so your card and QR code are one tap away at every appointment.</p>
+      <div class="steps">
+        <div class="step-row"><div class="step-num">1</div><div class="txt">Open your card link in <b>Safari</b> (or Chrome on Android).</div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="txt">Tap the <b>Share</b> icon at the bottom of the screen.</div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="txt">Select <b>"Add to Home Screen."</b></div></div>
+        <div class="step-row"><div class="step-num">4</div><div class="txt">Your Nails by Sha icon now lives on your Home Screen — tap it anytime.</div></div>
+      </div>
+      <button class="btn-secondary" onclick="jumpTo(2)">Back to My Card</button>
+    </div>
+  </section>
+
+  <!-- 6. ADMIN LOGIN & SEARCH -->
+  <section class="screen" data-name="Admin — Sign In">
+    <div class="admin-header">
+      <div class="eyebrow">Nails by Sha</div>
+      <div class="admin-badge">Admin</div>
+    </div>
+
+    <div id="admin-login-box">
+      <h1 class="title" style="font-size:20px;">Admin sign in</h1>
+      <p class="lead">Enter your admin key to look up clients and manage stamps.</p>
+      <div class="field"><label>Admin key</label><input id="admin-key-input" type="password" placeholder="••••••••"></div>
+      <div id="admin-login-error" style="display:none;color:#A9647F;font-size:12px;margin-bottom:10px;"></div>
+      <button class="btn-primary" onclick="handleAdminLogin()">Unlock Admin</button>
+    </div>
+
+    <div id="admin-search-box" style="display:none;">
+      <h1 class="title" style="font-size:20px;">Find a client</h1>
+      <p class="lead">Search by name, Instagram, phone, or client ID.</p>
+      <div class="field"><input id="admin-search-input" placeholder="Search clients…"></div>
+      <button class="btn-primary" onclick="handleAdminSearch()">Search</button>
+      <div id="admin-search-results" style="margin-top:16px;"></div>
+    </div>
+  </section>
+
+  <!-- 7. ADMIN QR SCAN RESULT -->
+  <section class="screen" data-name="Admin — Client Profile">
+    <div class="admin-header">
+      <div class="eyebrow">Client Profile</div>
+      <div class="admin-badge">Admin</div>
+    </div>
+    <div class="admin-client-card">
+      <div class="admin-name-row">
+        <div class="admin-avatar" id="admin-avatar">JD</div>
+        <div>
+          <div class="admin-name" id="admin-name">Jane Doe</div>
+          <div class="admin-ig" id="admin-ig">@janedoe · SHA-0001</div>
+        </div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="admin-bar-fill" style="width:70%"></div></div>
+      <div class="visits-count" style="margin-top:8px;" id="admin-visits-count">7 / 10 visits</div>
+
+      <div class="reward-list" id="admin-reward-list"></div>
+
+      <div class="admin-actions">
+        <div class="a-btn stamp" onclick="jumpTo(7)">+ Add Stamp</div>
+        <div class="a-btn redeem" onclick="jumpTo(9)">Redeem Reward</div>
+        <div class="a-btn history" onclick="viewAdminClientHistory()">View History</div>
+        <div class="a-btn edit" onclick="jumpTo(5)">← Back to Search</div>
+      </div>
+      <div id="admin-action-error" style="display:none;color:#A9647F;font-size:12px;margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- 8. ADD STAMP CONFIRM -->
+  <section class="screen" data-name="Add Stamp — Confirm">
+    <div class="modal-wrap">
+      <div class="scrim"></div>
+      <div class="modal-sheet">
+        <div class="modal-title" id="confirm-title">Add 1 stamp?</div>
+        <div class="modal-sub" id="confirm-sub">This is logged permanently to their history.</div>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="jumpTo(6)">Cancel</button>
+          <button class="btn-primary" onclick="handleAddStamp()">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. UPDATED / UNLOCKED -->
+  <section class="screen" data-name="Reward Unlocked">
+    <div class="celebrate-wrap">
+      <div class="tag-earned" id="celebrate-tag">Stamp added</div>
+      <div class="big-num" id="celebrate-num">8<span class="of">/10</span></div>
+      <div style="font-size:13px;color:var(--mocha-soft);margin-bottom:18px;" id="celebrate-name">Jane Doe · @janedoe</div>
+      <div class="reward-banner" style="width:100%;" id="celebrate-banner">
+        <div class="ic">🎉</div>
+        <div class="rt"><b>Progress saved</b>Her card updates automatically next time she opens it</div>
+      </div>
+      <button class="btn-primary" style="margin-top:22px;" onclick="jumpTo(6)">Back to Client</button>
+    </div>
+  </section>
+
+  <!-- 10. REDEEM -->
+  <section class="screen" data-name="Redeem Reward">
+    <div class="eyebrow">Redeem Reward</div>
+    <h1 class="title" style="font-size:20px;" id="redeem-name">Jane Doe · @janedoe</h1>
+    <p class="lead">Select which unlocked reward to apply to today's service.</p>
+    <div class="reward-list" id="redeem-list"></div>
+    <button class="btn-primary" id="redeem-confirm-btn" style="margin-top:18px;display:none;" onclick="handleRedeem()">Confirm Redemption</button>
+    <div id="redeem-error" style="display:none;color:#A9647F;font-size:12px;margin-top:10px;"></div>
+    <p class="footnote">Redeeming one reward won't affect the others — they stay available until used.</p>
+  </section>
+
+</div>
+
+<script>
+  // ===================== CONFIG =====================
+  const API_URL = "https://script.google.com/macros/s/AKfycbwE8oiLFH3Li7Uw5KMs8oTSP1rsRzyEPwwcpugeIh5YCwepQZ2Lu2V6rog_GsTt1vugsg/exec";
+  const REWARD_TIERS = [
+    { visits: 5,  key: "20", label: "20% off" },
+    { visits: 7,  key: "30", label: "30% off" },
+    { visits: 10, key: "50", label: "50% off" }
+  ];
+
+  // ===================== NAVIGATOR =====================
+  const screens = Array.from(document.querySelectorAll('.screen'));
+  let i = 0;
+  const jump = document.getElementById('jump');
+  screens.forEach((s,idx)=>{
+    const o = document.createElement('option');
+    o.value = idx; o.textContent = (idx+1)+'. '+s.dataset.name;
+    jump.appendChild(o);
+  });
+  function render(){
+    screens.forEach((s,idx)=> s.classList.toggle('active', idx===i));
+    document.getElementById('nav-index').textContent = (i+1)+' / '+screens.length;
+    document.getElementById('nav-name').textContent = screens[i].dataset.name;
+    jump.value = i;
+  }
+  function go(delta){
+    i = (i + delta + screens.length) % screens.length;
+    render();
+  }
+  function jumpTo(idx){ i = Number(idx); render(); }
+
+  // ===================== STATE =====================
+  // clientData / adminClient are normalized to this shape:
+  // { clientId, token, fullName, instagram, totalVisits, currentStamps,
+  //   rewards: { "20": "Locked|Unlocked|Redeemed", "30": ..., "50": ... } }
+  let clientData = null;
+  let adminClient = null;
+  let adminKey = null; // kept in memory only for this session — not persisted
+  let timelineData = null; // whichever data is currently shown in the timeline screen
+
+  // sample/demo data so the design still previews nicely with no live token
+  const DEMO_CLIENT = {
+    clientId: "SHA-0001", token: null, fullName: "Jane Doe", instagram: "@janedoe",
+    totalVisits: 7, currentStamps: 7,
+    rewards: { "20": "Redeemed", "30": "Unlocked", "50": "Locked" }
+  };
+
+  // ===================== HELPERS =====================
+  async function apiGet(params){
+    const url = API_URL + "?" + new URLSearchParams(params).toString();
+    const res = await fetch(url);
+    return res.json();
+  }
+  async function apiPost(payload){
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // avoids CORS preflight with Apps Script
+      body: JSON.stringify(payload)
+    });
+    return res.json();
+  }
+
+  function initials(name){
+    return (name || "").split(" ").filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join("");
+  }
+
+  function rewardStatusFromRow(row){
+    // handles the raw shape returned by admin searchClients (sheet column names)
+    return {
+      "20": row["20% Status"], "30": row["30% Status"], "50": row["50% Status"]
+    };
+  }
+
+  // ===================== DROPS GRID (reusable) =====================
+  function buildDropsGrid(containerId, currentStamps, rewards){
+    const grid = document.getElementById(containerId);
+    grid.innerHTML = "";
+    const rewardByVisit = {}; // visit number -> tier key
+    REWARD_TIERS.forEach(t => rewardByVisit[t.visits] = t);
+    const rows = [[1,2,3,4,5],[6,7,8,9,10]];
+    rows.forEach(rowNums=>{
+      const line = document.createElement('div');
+      line.className = 'drops-line';
+      rowNums.forEach(n=>{
+        const wrap = document.createElement('div');
+        wrap.className = 'drop-wrap';
+        const d = document.createElement('div');
+        d.className = 'drop';
+        const tier = rewardByVisit[n];
+        const reached = n <= currentStamps;
+        if(tier && reached) d.classList.add('reward');
+        else if(reached) d.classList.add('filled');
+        if(tier && rewards[tier.key] === "Redeemed") d.classList.add('redeemed');
+        wrap.appendChild(d);
+        const cap = document.createElement('div');
+        cap.className = 'drop-caption';
+        if(tier){
+          let status = 'visit ' + n;
+          if(rewards[tier.key] === "Redeemed") status = 'redeemed';
+          else if(reached) status = 'unlocked';
+          cap.innerHTML = `<b>${tier.label.replace(' off','')}</b>${status}`;
+        }
+        wrap.appendChild(cap);
+        line.appendChild(wrap);
+      });
+      grid.appendChild(line);
+    });
+  }
+
+  // ===================== CLIENT CARD SCREEN =====================
+  function renderCardScreen(data){
+    document.getElementById('card-client-id').textContent = data.clientId || "";
+    document.getElementById('card-name').textContent = data.fullName || "";
+    document.getElementById('card-ig').textContent = data.instagram || "";
+    document.getElementById('card-stamps').textContent = data.currentStamps;
+    buildDropsGrid('dropsGrid', data.currentStamps, data.rewards);
+
+    const unlocked = REWARD_TIERS.filter(t => data.rewards[t.key] === "Unlocked");
+    const bannerEl = document.getElementById('card-reward-banner');
+    const titleEl = document.getElementById('card-reward-title');
+    const subEl = document.getElementById('card-reward-sub');
+    if(unlocked.length){
+      bannerEl.style.display = 'flex';
+      titleEl.innerHTML = unlocked.map(t=>t.label).join(' &amp; ') + ' unlocked';
+      subEl.textContent = 'Ready to use on your next visit';
+    } else {
+      bannerEl.style.display = 'none';
+    }
+
+    const nextTier = REWARD_TIERS.find(t => data.currentStamps < t.visits);
+    const milestoneEl = document.getElementById('card-next-milestone');
+    if(nextTier){
+      const toGo = nextTier.visits - data.currentStamps;
+      milestoneEl.innerHTML = `Next milestone: <b>${nextTier.label} at visit ${nextTier.visits}</b> · ${toGo} visit${toGo===1?'':'s'} to go`;
+    } else {
+      milestoneEl.innerHTML = `<b>All rewards unlocked for this cycle 🎉</b>`;
+    }
+  }
+
+  async function loadClientCard(){
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('t');
+    const banner = document.getElementById('card-mode-banner');
+    if(!token){
+      clientData = DEMO_CLIENT;
+      banner.style.display = 'block';
+      banner.textContent = 'Preview mode — showing sample data (no client token in link)';
+      renderCardScreen(clientData);
+      return;
+    }
+    try{
+      const res = await apiGet({ action: 'getCard', token: token });
+      if(!res.success){
+        clientData = DEMO_CLIENT;
+        banner.style.display = 'block';
+        banner.textContent = 'Could not load your card (' + res.error + ') — showing sample data';
+        renderCardScreen(clientData);
+        return;
+      }
+      const c = res.card;
+      clientData = {
+        clientId: c.clientId, token: token, fullName: c.fullName, instagram: c.instagram,
+        totalVisits: c.totalVisits, currentStamps: c.currentStamps, rewards: c.rewards
+      };
+      banner.style.display = 'none';
+      renderCardScreen(clientData);
+    }catch(err){
+      clientData = DEMO_CLIENT;
+      banner.style.display = 'block';
+      banner.textContent = 'Connection error — showing sample data';
+      renderCardScreen(clientData);
+    }
+  }
+
+  // ===================== TIMELINE SCREEN =====================
+  function renderTimeline(data){
+    timelineData = data;
+    document.getElementById('tl-idline').textContent = data.fullName + ' · ' + data.instagram;
+    const unlockedCount = REWARD_TIERS.filter(t => data.rewards[t.key] === 'Unlocked').length;
+    document.getElementById('tl-summary').textContent =
+      `${data.currentStamps} of 10 visits complete.` +
+      (unlockedCount ? ` ${unlockedCount} reward${unlockedCount===1?'':'s'} ready whenever you are.` : '');
+
+    const rewardByVisit = {};
+    REWARD_TIERS.forEach(t => rewardByVisit[t.visits] = t);
+    const rowsEl = document.getElementById('timelineRows');
+    rowsEl.innerHTML = "";
+    for(let n=1;n<=10;n++){
+      const row = document.createElement('div');
+      row.className = 'visit-row';
+      const tier = rewardByVisit[n];
+      const reached = n <= data.currentStamps;
+      let numClass, numContent = n, tagHtml = '';
+      if(tier){
+        numClass = reached ? 'reward' : 'locked';
+        numContent = '🎁';
+        const status = data.rewards[tier.key];
+        if(status === 'Redeemed') tagHtml = '<span class="visit-tag redeemed">Redeemed</span>';
+        else if(reached) tagHtml = '<span class="visit-tag unlocked">Unlocked</span>';
+        else tagHtml = '<span class="visit-tag locked">Locked</span>';
+      } else {
+        numClass = reached ? 'done' : 'locked';
+      }
+      row.innerHTML = `
+        <div class="visit-num ${numClass}">${numContent}</div>
+        <div class="visit-text">
+          <div class="main">Visit ${n}${tier ? ' — '+tier.label : ''}</div>
+          <div class="sub">${reached ? (tier ? 'Reward earned' : 'Stamp collected') : 'Not yet reached'}</div>
+        </div>
+        ${tagHtml}
+      `;
+      rowsEl.appendChild(row);
+    }
+  }
+
+  function viewAdminClientHistory(){
+    if(adminClient) renderTimeline(adminClient);
+    jumpTo(3);
+  }
+
+  // ===================== REGISTRATION =====================
+  async function handleRegister(){
+    const btn = document.getElementById('reg-submit-btn');
+    const errEl = document.getElementById('reg-error');
+    errEl.style.display = 'none';
+
+    const payload = {
+      action: 'register',
+      fullName: document.getElementById('reg-name').value.trim(),
+      phone: document.getElementById('reg-phone').value.trim(),
+      email: document.getElementById('reg-email').value.trim(),
+      instagram: document.getElementById('reg-ig').value.trim(),
+      followed: document.getElementById('reg-followed').checked,
+      birthday: document.getElementById('reg-bday').value.trim()
+    };
+
+    if(!payload.fullName || !payload.phone || !payload.email || !payload.instagram){
+      errEl.textContent = 'Please fill in all required fields.';
+      errEl.style.display = 'block';
+      return;
+    }
+    if(!payload.followed){
+      errEl.textContent = 'Please confirm you follow @sharine.nails to join.';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    btn.textContent = 'Creating your card…';
+    btn.disabled = true;
+
+    try{
+      const res = await apiPost(payload);
+      if(!res.success){
+        errEl.textContent = res.error || 'Something went wrong. Please try again.';
+        errEl.style.display = 'block';
+        btn.textContent = 'Create My Loyalty Card';
+        btn.disabled = false;
+        return;
+      }
+      // update the URL so the card link is live for this session, then load real data
+      history.replaceState(null, '', window.location.pathname + '?t=' + res.token);
+      document.getElementById('success-msg').textContent =
+        `Your loyalty card is ready, ${payload.fullName.split(' ')[0]}. Save it to your Home Screen so it's one tap away at every appointment.`;
+      await loadClientCard();
+      jumpTo(1);
+    }catch(err){
+      errEl.textContent = 'Connection error — please check your internet and try again.';
+      errEl.style.display = 'block';
+    }
+    btn.textContent = 'Create My Loyalty Card';
+    btn.disabled = false;
+  }
+
+  // ===================== ADMIN: LOGIN =====================
+  function handleAdminLogin(){
+    const key = document.getElementById('admin-key-input').value;
+    const errEl = document.getElementById('admin-login-error');
+    if(!key){
+      errEl.textContent = 'Enter your admin key.';
+      errEl.style.display = 'block';
+      return;
+    }
+    adminKey = key;
+    document.getElementById('admin-login-box').style.display = 'none';
+    document.getElementById('admin-search-box').style.display = 'block';
+  }
+
+  // ===================== ADMIN: SEARCH =====================
+  async function handleAdminSearch(){
+    const q = document.getElementById('admin-search-input').value.trim();
+    const resultsEl = document.getElementById('admin-search-results');
+    resultsEl.innerHTML = '<p class="lead">Searching…</p>';
+    try{
+      const res = await apiGet({ action: 'searchClients', q: q, key: adminKey });
+      if(!res.success){
+        // likely a bad admin key — send back to login
+        adminKey = null;
+        document.getElementById('admin-search-box').style.display = 'none';
+        document.getElementById('admin-login-box').style.display = 'block';
+        document.getElementById('admin-login-error').textContent = 'That admin key was rejected — try again.';
+        document.getElementById('admin-login-error').style.display = 'block';
+        return;
+      }
+      if(!res.clients.length){
+        resultsEl.innerHTML = '<p class="lead">No clients found.</p>';
+        return;
+      }
+      resultsEl.innerHTML = '';
+      res.clients.forEach(row=>{
+        const item = document.createElement('div');
+        item.className = 'link-btn';
+        item.style.textAlign = 'left';
+        item.style.marginBottom = '8px';
+        item.innerHTML = `<b>${row["Full Name"]}</b> — ${row["Instagram"]} · ${row["Current Stamps"]}/10`;
+        item.onclick = () => openAdminClient(row);
+        resultsEl.appendChild(item);
+      });
+    }catch(err){
+      resultsEl.innerHTML = '<p class="lead">Connection error — please try again.</p>';
+    }
+  }
+
+  function openAdminClient(row){
+    adminClient = {
+      clientId: row["Client ID"], token: row["Secure Token"], fullName: row["Full Name"],
+      instagram: row["Instagram"], totalVisits: row["Total Visits"], currentStamps: row["Current Stamps"],
+      rewards: rewardStatusFromRow(row)
+    };
+    renderAdminProfile();
+    jumpTo(6);
+  }
+
+  // ===================== ADMIN: CLIENT PROFILE =====================
+  function renderAdminProfile(){
+    const c = adminClient;
+    document.getElementById('admin-avatar').textContent = initials(c.fullName);
+    document.getElementById('admin-name').textContent = c.fullName;
+    document.getElementById('admin-ig').textContent = c.instagram + ' · ' + c.clientId;
+    document.getElementById('admin-bar-fill').style.width = (c.currentStamps * 10) + '%';
+    document.getElementById('admin-visits-count').textContent = c.currentStamps + ' / 10 visits';
+    document.getElementById('admin-action-error').style.display = 'none';
+
+    const listEl = document.getElementById('admin-reward-list');
+    listEl.innerHTML = '';
+    REWARD_TIERS.forEach(t=>{
+      const status = c.rewards[t.key];
+      const div = document.createElement('div');
+      div.className = 'reward-item' + (status === 'Locked' ? ' locked' : '');
+      const pillText = status === 'Unlocked' ? 'Available' : status;
+      div.innerHTML = `<span>${t.label}</span><span class="pill">${pillText}</span>`;
+      listEl.appendChild(div);
+    });
+  }
+
+  // ===================== ADMIN: ADD STAMP =====================
+  function openStampConfirm(){
+    if(!adminClient) return;
+    document.getElementById('confirm-title').textContent = `Add 1 stamp for ${adminClient.fullName}?`;
+    const nextVisit = Math.min(adminClient.currentStamps + 1, 10);
+    document.getElementById('confirm-sub').textContent =
+      `This will bring them to visit ${nextVisit} of 10 and is logged permanently to their history.`;
+    jumpTo(7);
+  }
+
+  async function handleAddStamp(){
+    if(!adminClient) return;
+    try{
+      const res = await apiPost({ action: 'addStamp', token: adminClient.token, key: adminKey });
+      if(!res.success){
+        jumpTo(6);
+        const errEl = document.getElementById('admin-action-error');
+        errEl.textContent = res.error || 'Could not add stamp.';
+        errEl.style.display = 'block';
+        return;
+      }
+      const prevRewards = adminClient.rewards;
+      adminClient.totalVisits = res.totalVisits;
+      adminClient.currentStamps = res.currentStamps;
+      adminClient.rewards = res.rewards;
+      renderAdminProfile();
+
+      const newlyUnlocked = REWARD_TIERS.find(t => prevRewards[t.key] === 'Locked' && res.rewards[t.key] === 'Unlocked');
+      document.getElementById('celebrate-tag').textContent = 'Stamp added';
+      document.getElementById('celebrate-num').innerHTML = res.currentStamps + '<span class="of">/10</span>';
+      document.getElementById('celebrate-name').textContent = adminClient.fullName + ' · ' + adminClient.instagram;
+      const bannerEl = document.getElementById('celebrate-banner');
+      if(newlyUnlocked){
+        bannerEl.innerHTML = `<div class="ic">🎉</div><div class="rt"><b>${newlyUnlocked.label} unlocked!</b>Their card updates automatically next time they open it</div>`;
+      } else {
+        bannerEl.innerHTML = `<div class="ic">🎉</div><div class="rt"><b>Progress saved</b>Their card updates automatically next time they open it</div>`;
+      }
+      jumpTo(8);
+    }catch(err){
+      jumpTo(6);
+      const errEl = document.getElementById('admin-action-error');
+      errEl.textContent = 'Connection error — please try again.';
+      errEl.style.display = 'block';
+    }
+  }
+
+  // ===================== ADMIN: REDEEM =====================
+  let selectedRedeemTier = null;
+  function openRedeemScreen(){
+    if(!adminClient) return;
+    selectedRedeemTier = null;
+    document.getElementById('redeem-name').textContent = adminClient.fullName + ' · ' + adminClient.instagram;
+    const listEl = document.getElementById('redeem-list');
+    listEl.innerHTML = '';
+    const unlocked = REWARD_TIERS.filter(t => adminClient.rewards[t.key] === 'Unlocked');
+    const confirmBtn = document.getElementById('redeem-confirm-btn');
+    if(!unlocked.length){
+      listEl.innerHTML = '<p class="lead">No rewards are currently unlocked for this client.</p>';
+      confirmBtn.style.display = 'none';
+    } else {
+      unlocked.forEach(t=>{
+        const div = document.createElement('div');
+        div.className = 'reward-item selectable';
+        div.innerHTML = `<span>${t.label}</span><span class="pill">Available</span>`;
+        div.onclick = ()=>{
+          selectedRedeemTier = t.key;
+          Array.from(listEl.children).forEach(c=>c.classList.remove('selected'));
+          div.classList.add('selected');
+        };
+        listEl.appendChild(div);
+      });
+      confirmBtn.style.display = 'block';
+    }
+    jumpTo(9);
+  }
+
+  async function handleRedeem(){
+    const errEl = document.getElementById('redeem-error');
+    errEl.style.display = 'none';
+    if(!selectedRedeemTier){
+      errEl.textContent = 'Select a reward to redeem first.';
+      errEl.style.display = 'block';
+      return;
+    }
+    try{
+      const res = await apiPost({ action: 'redeemReward', token: adminClient.token, key: adminKey, tier: selectedRedeemTier });
+      if(!res.success){
+        errEl.textContent = res.error || 'Could not redeem this reward.';
+        errEl.style.display = 'block';
+        return;
+      }
+      adminClient.rewards[selectedRedeemTier] = 'Redeemed';
+      if(selectedRedeemTier === '50'){
+        adminClient.currentStamps = res.currentStamps;
+        adminClient.rewards = { "20": "Locked", "30": "Locked", "50": "Locked" };
+      }
+      renderAdminProfile();
+      jumpTo(6);
+    }catch(err){
+      errEl.textContent = 'Connection error — please try again.';
+      errEl.style.display = 'block';
+    }
+  }
+
+  // wire the Add Stamp / Redeem buttons on the admin profile screen to the dynamic openers
+  // (script runs after these elements exist in the DOM, so we wire directly)
+  const stampBtnEl = document.querySelector('.a-btn.stamp');
+  if(stampBtnEl) stampBtnEl.onclick = openStampConfirm;
+  const redeemBtnEl = document.querySelector('.a-btn.redeem');
+  if(redeemBtnEl) redeemBtnEl.onclick = openRedeemScreen;
+
+  // ===================== INIT =====================
+  render();
+  loadClientCard();
+</script>
+
+</body>
+</html>
