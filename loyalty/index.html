@@ -93,25 +93,18 @@
     letter-spacing:.03em;
   }
 
-  /* ---------- Phone frame ---------- */
+  /* ---------- Content frame (no phone bezel) ---------- */
   .phone{
     width:100%;
     max-width:390px;
     background: var(--paper);
-    border-radius:38px;
-    border:8px solid var(--mocha);
-    box-shadow: 0 30px 60px -20px rgba(62,43,36,0.35);
+    border-radius:18px;
     overflow:hidden;
     position:relative;
     min-height:720px;
   }
-  .notch{
-    position:absolute; top:0; left:50%; transform:translateX(-50%);
-    width:120px; height:22px; background:var(--mocha);
-    border-radius:0 0 16px 16px; z-index:5;
-  }
   .screen{
-    padding:44px 22px 26px;
+    padding:22px 22px 26px;
     min-height:720px;
     display:none;
     flex-direction:column;
@@ -484,7 +477,7 @@
 </head>
 <body>
 
-<div class="navigator">
+<div class="navigator" id="design-navigator" style="display:none;">
   <button class="nav-btn" onclick="go(-1)">←</button>
   <div class="nav-label">
     <span id="nav-index">1 / 9</span>
@@ -492,10 +485,23 @@
   </div>
   <button class="nav-btn" onclick="go(1)">→</button>
 </div>
-<select class="jump" id="jump" onchange="jumpTo(this.value)"></select>
+<select class="jump" id="jump" onchange="jumpTo(this.value)" style="display:none;"></select>
 
 <div class="phone">
-  <div class="notch"></div>
+
+  <!-- 0. LANDING -->
+  <section class="screen" data-name="Welcome">
+    <div class="success-wrap">
+      <div class="brandmark" style="margin-bottom:18px;">
+        <div class="word" style="font-size:28px;">Nails by Sha</div>
+        <div class="sub">Loyalty Program</div>
+      </div>
+      <p class="lead" style="max-width:270px;">Earn a stamp every visit. Unlock 20% off at visit 5, 30% at visit 7, and 50% at visit 10.</p>
+      <button class="btn-primary" onclick="jumpTo(1)">New Client — Create My Loyalty Card</button>
+      <p class="footnote" style="max-width:260px;">Already a member? Reopen the link saved to your Home Screen, or the one Sharine sent you. Lost it? DM <b>@sharine.nails</b>.</p>
+      <button class="btn-ghost" onclick="jumpTo(6)" style="margin-top:28px;font-size:11px;opacity:0.6;">Staff Login</button>
+    </div>
+  </section>
 
   <!-- 1. REGISTRATION -->
   <section class="screen" data-name="Registration">
@@ -529,8 +535,8 @@
       <div class="eyebrow">Welcome to</div>
       <div class="display" style="font-size:24px;margin:2px 0 10px;">Nails by Sha</div>
       <p class="lead" style="max-width:260px;" id="success-msg">Your loyalty card is ready. Save it to your Home Screen so it's one tap away at every appointment.</p>
-      <button class="btn-primary" onclick="jumpTo(2)">View My Card</button>
-      <button class="btn-ghost" onclick="jumpTo(4)">How do I save this? →</button>
+      <button class="btn-primary" onclick="jumpTo(3)">View My Card</button>
+      <button class="btn-ghost" onclick="jumpTo(5)">How do I save this? →</button>
     </div>
   </section>
 
@@ -563,8 +569,8 @@
       </div>
 
       <div class="card-links">
-        <div class="link-btn" onclick="jumpTo(3)">Visit History</div>
-        <div class="link-btn" onclick="jumpTo(4)">Save to Home Screen</div>
+        <div class="link-btn" onclick="jumpTo(4)">Visit History</div>
+        <div class="link-btn" onclick="jumpTo(5)">Save to Home Screen</div>
       </div>
     </div>
   </section>
@@ -589,7 +595,7 @@
         <div class="step-row"><div class="step-num">3</div><div class="txt">Select <b>"Add to Home Screen."</b></div></div>
         <div class="step-row"><div class="step-num">4</div><div class="txt">Your Nails by Sha icon now lives on your Home Screen — tap it anytime.</div></div>
       </div>
-      <button class="btn-secondary" onclick="jumpTo(2)">Back to My Card</button>
+      <button class="btn-secondary" onclick="jumpTo(3)">Back to My Card</button>
     </div>
   </section>
 
@@ -606,6 +612,7 @@
       <div class="field"><label>Admin key</label><input id="admin-key-input" type="password" placeholder="••••••••"></div>
       <div id="admin-login-error" style="display:none;color:#A9647F;font-size:12px;margin-bottom:10px;"></div>
       <button class="btn-primary" onclick="handleAdminLogin()">Unlock Admin</button>
+      <button class="btn-ghost" onclick="jumpTo(0)">← Back</button>
     </div>
 
     <div id="admin-search-box" style="display:none;">
@@ -637,10 +644,10 @@
       <div class="reward-list" id="admin-reward-list"></div>
 
       <div class="admin-actions">
-        <div class="a-btn stamp" onclick="jumpTo(7)">+ Add Stamp</div>
-        <div class="a-btn redeem" onclick="jumpTo(9)">Redeem Reward</div>
+        <div class="a-btn stamp" onclick="jumpTo(8)">+ Add Stamp</div>
+        <div class="a-btn redeem" onclick="jumpTo(10)">Redeem Reward</div>
         <div class="a-btn history" onclick="viewAdminClientHistory()">View History</div>
-        <div class="a-btn edit" onclick="jumpTo(5)">← Back to Search</div>
+        <div class="a-btn edit" onclick="jumpTo(6)">← Back to Search</div>
       </div>
       <div id="admin-action-error" style="display:none;color:#A9647F;font-size:12px;margin-top:10px;"></div>
     </div>
@@ -654,7 +661,7 @@
         <div class="modal-title" id="confirm-title">Add 1 stamp?</div>
         <div class="modal-sub" id="confirm-sub">This is logged permanently to their history.</div>
         <div class="modal-actions">
-          <button class="btn-secondary" onclick="jumpTo(6)">Cancel</button>
+          <button class="btn-secondary" onclick="jumpTo(7)">Cancel</button>
           <button class="btn-primary" onclick="handleAddStamp()">Confirm</button>
         </div>
       </div>
@@ -671,7 +678,7 @@
         <div class="ic">🎉</div>
         <div class="rt"><b>Progress saved</b>Her card updates automatically next time she opens it</div>
       </div>
-      <button class="btn-primary" style="margin-top:22px;" onclick="jumpTo(6)">Back to Client</button>
+      <button class="btn-primary" style="margin-top:22px;" onclick="jumpTo(7)">Back to Client</button>
     </div>
   </section>
 
@@ -684,6 +691,7 @@
     <button class="btn-primary" id="redeem-confirm-btn" style="margin-top:18px;display:none;" onclick="handleRedeem()">Confirm Redemption</button>
     <div id="redeem-error" style="display:none;color:#A9647F;font-size:12px;margin-top:10px;"></div>
     <p class="footnote">Redeeming one reward won't affect the others — they stay available until used.</p>
+    <button class="btn-ghost" onclick="jumpTo(7)">← Back to Client</button>
   </section>
 
 </div>
@@ -904,7 +912,7 @@
 
   function viewAdminClientHistory(){
     if(adminClient) renderTimeline(adminClient);
-    jumpTo(3);
+    jumpTo(4);
   }
 
   // ===================== REGISTRATION =====================
@@ -951,7 +959,7 @@
       document.getElementById('success-msg').textContent =
         `Your loyalty card is ready, ${payload.fullName.split(' ')[0]}. Save it to your Home Screen so it's one tap away at every appointment.`;
       await loadClientCard();
-      jumpTo(1);
+      jumpTo(2);
     }catch(err){
       errEl.textContent = 'Connection error — please check your internet and try again.';
       errEl.style.display = 'block';
@@ -1016,7 +1024,7 @@
       rewards: rewardStatusFromRow(row)
     };
     renderAdminProfile();
-    jumpTo(6);
+    jumpTo(7);
   }
 
   // ===================== ADMIN: CLIENT PROFILE =====================
@@ -1048,7 +1056,7 @@
     const nextVisit = Math.min(adminClient.currentStamps + 1, 10);
     document.getElementById('confirm-sub').textContent =
       `This will bring them to visit ${nextVisit} of 10 and is logged permanently to their history.`;
-    jumpTo(7);
+    jumpTo(8);
   }
 
   async function handleAddStamp(){
@@ -1056,7 +1064,7 @@
     try{
       const res = await apiPost({ action: 'addStamp', token: adminClient.token, key: adminKey });
       if(!res.success){
-        jumpTo(6);
+        jumpTo(7);
         const errEl = document.getElementById('admin-action-error');
         errEl.textContent = res.error || 'Could not add stamp.';
         errEl.style.display = 'block';
@@ -1078,9 +1086,9 @@
       } else {
         bannerEl.innerHTML = `<div class="ic">🎉</div><div class="rt"><b>Progress saved</b>Their card updates automatically next time they open it</div>`;
       }
-      jumpTo(8);
+      jumpTo(9);
     }catch(err){
-      jumpTo(6);
+      jumpTo(7);
       const errEl = document.getElementById('admin-action-error');
       errEl.textContent = 'Connection error — please try again.';
       errEl.style.display = 'block';
@@ -1114,7 +1122,7 @@
       });
       confirmBtn.style.display = 'block';
     }
-    jumpTo(9);
+    jumpTo(10);
   }
 
   async function handleRedeem(){
@@ -1138,7 +1146,7 @@
         adminClient.rewards = { "20": "Locked", "30": "Locked", "50": "Locked" };
       }
       renderAdminProfile();
-      jumpTo(6);
+      jumpTo(7);
     }catch(err){
       errEl.textContent = 'Connection error — please try again.';
       errEl.style.display = 'block';
@@ -1152,9 +1160,30 @@
   const redeemBtnEl = document.querySelector('.a-btn.redeem');
   if(redeemBtnEl) redeemBtnEl.onclick = openRedeemScreen;
 
-  // ===================== INIT =====================
-  render();
-  loadClientCard();
+  // ===================== INIT / ROUTING =====================
+  // Real visitors never see the design-review arrows — those are only for
+  // Sharine to browse every screen while reviewing the visual design.
+  // Add ?design=1 to the URL to bring them back for a design review session.
+  const initParams = new URLSearchParams(window.location.search);
+  const isDesignMode = initParams.has('design');
+
+  if (isDesignMode) {
+    document.getElementById('design-navigator').style.display = 'flex';
+    document.getElementById('jump').style.display = 'block';
+  }
+
+  if (initParams.has('t')) {
+    // someone opened their personal card link — go straight to their card
+    loadClientCard().then(() => jumpTo(3));
+  } else if (initParams.has('admin')) {
+    // staff opened the direct admin link — go straight to sign-in
+    jumpTo(6);
+  } else {
+    // first-time visitor — start at the Welcome / landing screen
+    loadClientCard(); // preloads demo data so the Card screen still looks right if reached
+    jumpTo(0);
+  }
+
 </script>
 
 </body>
