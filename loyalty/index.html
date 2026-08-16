@@ -3,9 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nails by Sha — Loyalty Prototype</title>
+<title>Nails by Sha — Loyalty Program</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3E2B24">
 <style>
   :root{
     --cream:#FAF3EC;
@@ -499,12 +503,13 @@
       <p class="lead" style="max-width:270px;">Earn a stamp every visit. Unlock 20% off at visit 5, 30% at visit 7, and 50% at visit 10.</p>
       <button class="btn-primary" onclick="jumpTo(1)">New Client — Create My Loyalty Card</button>
       <p class="footnote" style="max-width:260px;">Already a member? Reopen the link saved to your Home Screen, or the one Sharine sent you. Lost it? DM <b>@sharine.nails</b>.</p>
-      <button class="btn-ghost" onclick="jumpTo(6)" style="margin-top:28px;font-size:11px;opacity:0.6;">Staff Login</button>
+      <button class="btn-ghost" onclick="goToAdmin()" style="margin-top:28px;font-size:11px;opacity:0.6;">Staff Login</button>
     </div>
   </section>
 
   <!-- 1. REGISTRATION -->
   <section class="screen" data-name="Registration">
+    <button class="btn-ghost" style="margin:0 0 8px;" onclick="goToLanding()">← Back</button>
     <div class="brandmark">
       <div class="word">Nails by Sha</div>
       <div class="sub">Loyalty Program</div>
@@ -563,13 +568,8 @@
         <div class="next-milestone" id="card-next-milestone">Next milestone: <b>50% off at visit 10</b> · 3 visits to go</div>
       </div>
 
-      <div class="qr-block">
-        <div class="qr-code"></div>
-        <div class="qr-hint">Show this to Sharine at check-in</div>
-      </div>
-
       <div class="card-links">
-        <div class="link-btn" onclick="jumpTo(4)">Visit History</div>
+        <div class="link-btn" onclick="openClientTimeline()">Visit History</div>
         <div class="link-btn" onclick="jumpTo(5)">Save to Home Screen</div>
       </div>
     </div>
@@ -577,6 +577,7 @@
 
   <!-- 4. CLIENT PROFILE / TIMELINE -->
   <section class="screen" data-name="Client Progress Detail">
+    <button class="btn-ghost" style="margin:0 0 12px;" onclick="goBackFromTimeline()">← Back</button>
     <div class="eyebrow" id="tl-idline">Jane Doe · @janedoe</div>
     <h1 class="title" style="font-size:20px;">Your visit history</h1>
     <p class="lead" id="tl-summary">7 of 10 visits complete. Two rewards are ready whenever you are.</p>
@@ -612,15 +613,15 @@
       <div class="field"><label>Admin key</label><input id="admin-key-input" type="password" placeholder="••••••••"></div>
       <div id="admin-login-error" style="display:none;color:#A9647F;font-size:12px;margin-bottom:10px;"></div>
       <button class="btn-primary" onclick="handleAdminLogin()">Unlock Admin</button>
-      <button class="btn-ghost" onclick="jumpTo(0)">← Back</button>
+      <button class="btn-ghost" onclick="goToLanding()">← Back</button>
     </div>
 
     <div id="admin-search-box" style="display:none;">
-      <h1 class="title" style="font-size:20px;">Find a client</h1>
-      <p class="lead">Search by name, Instagram, phone, or client ID.</p>
-      <div class="field"><input id="admin-search-input" placeholder="Search clients…"></div>
-      <button class="btn-primary" onclick="handleAdminSearch()">Search</button>
-      <div id="admin-search-results" style="margin-top:16px;"></div>
+      <h1 class="title" style="font-size:20px;">Your clients</h1>
+      <div style="display:flex;gap:8px;margin-bottom:14px;">
+        <input id="admin-search-input" placeholder="Search by name, IG, phone…" style="flex:1;padding:11px 12px;border-radius:11px;border:1px solid var(--line);background:var(--cream);font-family:'Jost',sans-serif;font-size:13px;" oninput="handleAdminSearch()">
+      </div>
+      <div id="admin-search-results" style="margin-top:4px;"></div>
     </div>
   </section>
 
@@ -869,9 +870,30 @@
     }
   }
 
+  // ===================== NAVIGATION HELPERS (keep URL bar in sync so
+  // "Add to Home Screen" captures the right link for each icon) =====================
+  function goToLanding(){
+    history.replaceState(null, '', window.location.pathname);
+    jumpTo(0);
+  }
+  function goToAdmin(){
+    history.replaceState(null, '', window.location.pathname + '?admin=1');
+    jumpTo(6);
+  }
+
   // ===================== TIMELINE SCREEN =====================
-  function renderTimeline(data){
+  let timelineBackTarget = 3;
+
+  function formatDate(iso){
+    if(!iso) return null;
+    const d = new Date(iso);
+    if(isNaN(d)) return null;
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function renderTimeline(data, stampDates){
     timelineData = data;
+    stampDates = stampDates || {};
     document.getElementById('tl-idline').textContent = data.fullName + ' · ' + data.instagram;
     const unlockedCount = REWARD_TIERS.filter(t => data.rewards[t.key] === 'Unlocked').length;
     document.getElementById('tl-summary').textContent =
@@ -887,6 +909,7 @@
       row.className = 'visit-row';
       const tier = rewardByVisit[n];
       const reached = n <= data.currentStamps;
+      const dateStr = stampDates[n] ? formatDate(stampDates[n]) : null;
       let numClass, numContent = n, tagHtml = '';
       if(tier){
         numClass = reached ? 'reward' : 'locked';
@@ -898,11 +921,15 @@
       } else {
         numClass = reached ? 'done' : 'locked';
       }
+      let subText = 'Not yet reached';
+      if(reached){
+        subText = dateStr ? dateStr : (tier ? 'Reward earned' : 'Stamp collected');
+      }
       row.innerHTML = `
         <div class="visit-num ${numClass}">${numContent}</div>
         <div class="visit-text">
           <div class="main">Visit ${n}${tier ? ' — '+tier.label : ''}</div>
-          <div class="sub">${reached ? (tier ? 'Reward earned' : 'Stamp collected') : 'Not yet reached'}</div>
+          <div class="sub">${subText}</div>
         </div>
         ${tagHtml}
       `;
@@ -910,9 +937,31 @@
     }
   }
 
-  function viewAdminClientHistory(){
-    if(adminClient) renderTimeline(adminClient);
+  async function fetchAndApplyHistory(data){
+    if(!data.token) return; // demo/preview data has no real history to fetch
+    try{
+      const res = await apiGet({ action: 'getHistory', token: data.token });
+      if(res.success) renderTimeline(data, res.history);
+    }catch(err){ /* dates just won't show — not critical */ }
+  }
+
+  function openClientTimeline(){
+    timelineBackTarget = 3;
+    renderTimeline(clientData);
+    fetchAndApplyHistory(clientData);
     jumpTo(4);
+  }
+
+  function viewAdminClientHistory(){
+    if(!adminClient) return;
+    timelineBackTarget = 7;
+    renderTimeline(adminClient);
+    fetchAndApplyHistory(adminClient);
+    jumpTo(4);
+  }
+
+  function goBackFromTimeline(){
+    jumpTo(timelineBackTarget);
   }
 
   // ===================== REGISTRATION =====================
@@ -980,13 +1029,20 @@
     adminKey = key;
     document.getElementById('admin-login-box').style.display = 'none';
     document.getElementById('admin-search-box').style.display = 'block';
+    document.getElementById('admin-search-input').value = '';
+    handleAdminSearch(); // load the full client list immediately
   }
 
-  // ===================== ADMIN: SEARCH =====================
+  // ===================== ADMIN: SEARCH / LIST =====================
+  let searchDebounce = null;
   async function handleAdminSearch(){
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(runAdminSearch, 200);
+  }
+  async function runAdminSearch(){
     const q = document.getElementById('admin-search-input').value.trim();
     const resultsEl = document.getElementById('admin-search-results');
-    resultsEl.innerHTML = '<p class="lead">Searching…</p>';
+    resultsEl.innerHTML = '<p class="lead">Loading…</p>';
     try{
       const res = await apiGet({ action: 'searchClients', q: q, key: adminKey });
       if(!res.success){
@@ -999,7 +1055,7 @@
         return;
       }
       if(!res.clients.length){
-        resultsEl.innerHTML = '<p class="lead">No clients found.</p>';
+        resultsEl.innerHTML = '<p class="lead">No clients yet.</p>';
         return;
       }
       resultsEl.innerHTML = '';
