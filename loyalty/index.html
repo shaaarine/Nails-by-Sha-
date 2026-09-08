@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Nails by Sha">
 <meta name="theme-color" content="#3E2B24">
+<meta name="app-version" content="2026-09-08-1">
 <style>
   :root{
     --cream:#FAF3EC;
@@ -1436,9 +1437,32 @@
       }
     }
   }
-  window.addEventListener('pageshow', refreshIfClientCard);
+
+  // ===================== AUTO-UPDATE =====================
+  // Icons saved to the Home Screen before a code change keep running the OLD
+  // code — iOS doesn't re-download a saved web app on its own. This quietly
+  // checks whether a newer version has been published, and if so, reloads to
+  // fetch it, so nobody has to manually delete and re-save their icon after
+  // every future update.
+  const APP_VERSION = document.querySelector('meta[name="app-version"]').content;
+  async function checkForAppUpdate(){
+    try{
+      const res = await fetch(window.location.pathname, { cache: 'no-store' });
+      const html = await res.text();
+      const match = html.match(/name="app-version"\s+content="([^"]+)"/);
+      if(match && match[1] !== APP_VERSION){
+        window.location.reload();
+      }
+    }catch(err){ /* offline or blocked — will just check again next resume */ }
+  }
+
+  function onAppResume(){
+    checkForAppUpdate();
+    refreshIfClientCard();
+  }
+  window.addEventListener('pageshow', onAppResume);
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') refreshIfClientCard();
+    if (document.visibilityState === 'visible') onAppResume();
   });
 
 </script>
