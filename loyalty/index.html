@@ -283,6 +283,20 @@
   }
   .drop.filled{ background: var(--rose-deep); }
   .drop.reward{ background: var(--gold); width:26px; height:26px; }
+  @keyframes stampFadeIn{
+    0%{ opacity:0; transform:scale(0.3); }
+    60%{ opacity:1; transform:scale(1.15); }
+    100%{ opacity:1; transform:scale(1); }
+  }
+  .drop.just-earned{ animation: stampFadeIn 0.7s ease; }
+  .live-toast{
+    position:fixed; top:16px; left:50%; transform:translateX(-50%);
+    background:var(--mocha); color:var(--cream); padding:10px 18px;
+    border-radius:20px; font-size:12.5px; font-family:'Jost',sans-serif;
+    box-shadow:0 8px 20px rgba(62,43,36,0.3); z-index:50;
+    opacity:0; transition:opacity 0.3s ease;
+  }
+  .live-toast.show{ opacity:1; }
   .drop.redeemed::after{
     content:"✦";
     position:absolute; inset:0;
@@ -481,6 +495,7 @@
 </style>
 </head>
 <body>
+<div class="live-toast" id="live-toast"></div>
 
 <div class="navigator" id="design-navigator" style="display:none;">
   <button class="nav-btn" onclick="go(-1)">←</button>
@@ -741,8 +756,13 @@
   function go(delta){
     i = (i + delta + screens.length) % screens.length;
     render();
+    if(i === 3) startCardPolling(); else stopCardPolling();
   }
-  function jumpTo(idx){ i = Number(idx); render(); }
+  function jumpTo(idx){
+    i = Number(idx);
+    render();
+    if(i === 3) startCardPolling(); else stopCardPolling();
+  }
 
   // ===================== STATE =====================
   // clientData / adminClient are normalized to this shape:
@@ -787,7 +807,8 @@
   }
 
   // ===================== DROPS GRID (reusable) =====================
-  function buildDropsGrid(containerId, currentStamps, rewards){
+  function buildDropsGrid(containerId, currentStamps, rewards, newlyEarned){
+    newlyEarned = newlyEarned || [];
     const grid = document.getElementById(containerId);
     grid.innerHTML = "";
     const rewardByVisit = {}; // visit number -> tier key
@@ -806,6 +827,7 @@
         if(tier && reached) d.classList.add('reward');
         else if(reached) d.classList.add('filled');
         if(tier && rewards[tier.key] === "Redeemed") d.classList.add('redeemed');
+        if(newlyEarned.includes(n)) d.classList.add('just-earned');
         wrap.appendChild(d);
         const cap = document.createElement('div');
         cap.className = 'drop-caption';
@@ -823,12 +845,12 @@
   }
 
   // ===================== CLIENT CARD SCREEN =====================
-  function renderCardScreen(data){
+  function renderCardScreen(data, newlyEarned){
     document.getElementById('card-client-id').textContent = data.clientId || "";
     document.getElementById('card-name').textContent = data.fullName || "";
     document.getElementById('card-ig').textContent = data.instagram || "";
     document.getElementById('card-stamps').textContent = data.currentStamps;
-    buildDropsGrid('dropsGrid', data.currentStamps, data.rewards);
+    buildDropsGrid('dropsGrid', data.currentStamps, data.rewards, newlyEarned);
 
     const unlocked = REWARD_TIERS.filter(t => data.rewards[t.key] === "Unlocked");
     const bannerEl = document.getElementById('card-reward-banner');
@@ -854,6 +876,14 @@
     renderClientQr(data);
   }
 
+  function showLiveToast(message){
+    const toast = document.getElementById('live-toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(showLiveToast._t);
+    showLiveToast._t = setTimeout(() => toast.classList.remove('show'), 2600);
+  }
+
   // QR encodes just the client's secure token (not the full link) — smaller,
   // faster to scan, and the admin scanner resolves it the same way a token in
   // a URL would be resolved.
@@ -871,7 +901,7 @@
     });
   }
 
-  async function loadClientCard(){
+  async function loadClientCard(animate){
     const params = new URLSearchParams(window.location.search);
     const token = params.get('t');
     const banner = document.getElementById('card-mode-banner');
@@ -892,18 +922,43 @@
         return;
       }
       const c = res.card;
+      const previousStamps = (animate && clientData && clientData.token === token) ? clientData.currentStamps : null;
       clientData = {
         clientId: c.clientId, token: token, fullName: c.fullName, instagram: c.instagram,
         totalVisits: c.totalVisits, currentStamps: c.currentStamps, rewards: c.rewards
       };
       banner.style.display = 'none';
-      renderCardScreen(clientData);
+
+      let newlyEarned = [];
+      if(previousStamps !== null && clientData.currentStamps > previousStamps){
+        for(let n = previousStamps + 1; n <= clientData.currentStamps; n++) newlyEarned.push(n);
+        showLiveToast(newlyEarned.length === 1 ? 'New stamp added! ✨' : newlyEarned.length + ' new stamps added! ✨');
+      }
+      renderCardScreen(clientData, newlyEarned);
     }catch(err){
       clientData = DEMO_CLIENT;
       banner.style.display = 'block';
       banner.textContent = 'Connection error — showing sample data';
       renderCardScreen(clientData);
     }
+  }
+
+  // ===================== LIVE POLLING (free alternative to push
+  // notifications — quietly re-checks the sheet while the card is open) =====================
+  let pollTimer = null;
+  const POLL_INTERVAL_MS = 20000;
+
+  function startCardPolling(){
+    stopCardPolling();
+    if(!clientData || !clientData.token) return;
+    pollTimer = setInterval(() => {
+      if(document.visibilityState === 'visible' && i === 3){
+        loadClientCard(true);
+      }
+    }, POLL_INTERVAL_MS);
+  }
+  function stopCardPolling(){
+    if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
   }
 
   // ===================== NAVIGATION HELPERS (keep URL bar in sync so
@@ -1374,7 +1429,7 @@
   // foreground, so the client never has to force-quit to see an update.
   function refreshIfClientCard(){
     if (initParams.has('t')) {
-      loadClientCard();
+      loadClientCard(true);
       // if they resumed while looking at their own visit history, refresh that too
       if (i === 4 && timelineBackTarget === 3) {
         openClientTimeline();
