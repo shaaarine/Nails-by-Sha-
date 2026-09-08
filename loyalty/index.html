@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nails by Sha — Loyalty Program</title>
+<title>Nails by Sha — Loyalty Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -1365,6 +1365,26 @@
     loadClientCard(); // preloads demo data so the Card screen still looks right if reached
     jumpTo(0);
   }
+
+  // ===================== REFRESH ON RESUME =====================
+  // iOS keeps a Home Screen web app "frozen" in memory instead of closing it
+  // when backgrounded — reopening it just unfreezes the old page rather than
+  // reloading, so it never re-checks the Sheet for a new stamp on its own.
+  // These listeners force a fresh fetch whenever the app comes back to the
+  // foreground, so the client never has to force-quit to see an update.
+  function refreshIfClientCard(){
+    if (initParams.has('t')) {
+      loadClientCard();
+      // if they resumed while looking at their own visit history, refresh that too
+      if (i === 4 && timelineBackTarget === 3) {
+        openClientTimeline();
+      }
+    }
+  }
+  window.addEventListener('pageshow', refreshIfClientCard);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshIfClientCard();
+  });
 
 </script>
 
