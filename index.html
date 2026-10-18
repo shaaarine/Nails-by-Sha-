@@ -202,6 +202,9 @@
     position:relative; aspect-ratio:4/5; overflow:hidden; background:var(--stone);
   }
   .svc-photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  @media (max-width:640px){
+    .svc-photo{aspect-ratio:1/1;}
+  }
   .svc-photo-fallback{
     position:absolute; inset:0; display:none; align-items:center; justify-content:center;
     text-align:center; flex-direction:column; gap:4px; font-size:11px; color:#fff;
@@ -564,9 +567,13 @@ if(floatBookBtn && bookSection && 'IntersectionObserver' in window){
 
 /* ---------------- Data (edit freely) ---------------- */
 const SERVICES = [
-  {id:'rm-clean', name:'Russian Manicure (Cleaning Only)', dur:'1-1:30 hrs', price:1190, img:'service-cleaning.jpg', bookingImg:'booking-cleaning.jpg', desc:'Full dry cuticle cleaning and nail shaping only — no gel or polish. Bare, healthy-looking natural nails. Best if you want a break from gel or just love the clean, groomed look on its own.'},
-  {id:'rm-overlay', name:'Russian Manicure with Hard Gel Overlay', dur:'3 hrs', price:1690, img:'service-overlay.jpg', bookingImg:'booking-overlay.jpg', desc:'Everything in the cleaning service, plus a full hard gel overlay for extra strength and shine. Keeps your natural nail length and shape — just stronger and glossier.'},
-  {id:'rm-ext', name:'Russian Manicure with Hard Gel Extensions', dur:'3-3:30 hrs', price:1890, img:'service-extensions.jpg', bookingImg:'booking-extensions.jpg', desc:'Everything in the cleaning service, plus hard gel extensions built to your preferred length and shape (round, almond, square, or coffin). Looks and feels like natural nails, just longer.'}
+  // "pos" controls which part of the photo stays visible when it's cropped to
+  // fit the frame — try values like 'center', 'top', 'bottom', 'center 20%',
+  // or '70% 30%' (horizontal% vertical%) until the important part of the
+  // photo (usually the nails) isn't cut off. Defaults to 'center' if left out.
+  {id:'rm-clean', name:'Russian Manicure (Cleaning Only)', dur:'1-1:30 hrs', price:1190, img:'service-cleaning.jpg', bookingImg:'booking-cleaning.jpg', pos:'center', desc:'Full dry cuticle cleaning and nail shaping only — no gel or polish. Bare, healthy-looking natural nails. Best if you want a break from gel or just love the clean, groomed look on its own.'},
+  {id:'rm-overlay', name:'Russian Manicure with Hard Gel Overlay', dur:'3 hrs', price:1690, img:'service-overlay.jpg', bookingImg:'booking-overlay.jpg', pos:'center', desc:'Everything in the cleaning service, plus a full hard gel overlay for extra strength and shine. Keeps your natural nail length and shape — just stronger and glossier.'},
+  {id:'rm-ext', name:'Russian Manicure with Hard Gel Extensions', dur:'3-3:30 hrs', price:1890, img:'service-extensions.jpg', bookingImg:'booking-extensions.jpg', pos:'center', desc:'Everything in the cleaning service, plus hard gel extensions built to your preferred length and shape (round, almond, square, or coffin). Looks and feels like natural nails, just longer.'}
 ];
 
 const ADDONS = [
@@ -595,7 +602,7 @@ SERVICES.forEach(s=>{
   el.className = 'svc-card';
   el.innerHTML = `
     <div class="svc-photo">
-      <img src="${s.img}" alt="${s.name} example" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <img src="${s.img}" alt="${s.name} example" style="object-position:${s.pos || 'center'};" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
       <div class="svc-photo-fallback">Add example photo<br><span class="mono">(${s.img})</span></div>
     </div>
     <div class="svc-body">
@@ -720,7 +727,7 @@ function render(){
       b.className = 'opt-card' + (state.service?.id===s.id ? ' active':'');
       b.innerHTML = `
         <div class="opt-photo">
-          <img src="${s.bookingImg}" alt="${s.name} example" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <img src="${s.bookingImg}" alt="${s.name} example" style="object-position:${s.pos || 'center'};" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="opt-photo-fallback">Add example photo<br><span class="mono">(${s.bookingImg})</span></div>
         </div>
         <div class="name">${s.name}</div><div class="meta mono">${s.dur} · ₱${s.price}</div>`;
